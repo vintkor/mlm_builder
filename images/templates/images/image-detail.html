@@ -1,0 +1,86 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    Список Ваших изображений
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на лендинг с другим изображением повышает шанс получить нового партнёра. Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">Как с этим работать?</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12 imageCard">
+            <div class="card mb-4 card-shadow">
+                <div class="card-body">
+                    <img src="{{ image.image.url }}" class="img-fluid rounded" style="margin: 0 auto; display: block;">
+                    <div style="text-align: center; margin: 15px 0;">
+                        <a href="#" class="btn btn-sm btn-outline-primary btn-lg" id="image-to-landing">Связать с новым лендингом</a>
+                    </div>
+                    {% for landingimage in image.get_landingimages %}
+                        <table class="table table-bordered landing-row">
+                            <tr>
+                                <td>{{ landingimage.langing }}</td>
+                                <td style="text-align: right; width: 30%; vertical-align: middle; text-align: center" rowspan="2">
+                                    <a href="{{ landingimage.langing.get_absolute_url }}" class="btn btn-sm btn-info" target="_blank">Смотреть лендинг</a>
+                                    <a href="#" class="btn btn-sm btn-danger delLanding" data-id="{{ landingimage.langing.id }}" data-image="{{ image.id }}">Отвязать лендинг</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div><span class="text-info">Заголовок:</span> {{ landingimage.title }}</div>
+                                    <div><span class="text-info">Описание:</span> {{ landingimage.description }}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="MyLendingModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{% url 'images:landing-to-image' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ image.id }}" name="image">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="choiceLanding">Выберите лендинг</label>
+                            <select name="landing" id="choiceLanding"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Заголовок</label>
+                            <input type="text" name="title" value="" id="title" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Описание</label>
+                            <textarea name="description" id="description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block footer_scripts %}{% endblock footer_scripts %}

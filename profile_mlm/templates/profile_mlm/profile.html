@@ -1,0 +1,102 @@
+{% extends 'theme_2.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card card-shadow">
+                <div class="card-header">
+                    <div class="card-title">Профиль пользователя
+                        {#                    <ul class="header-dropdown m-r--5">#}
+                        {#                        <li class="dropdown">#}
+                        {#                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"#}
+                        {#                               aria-haspopup="true" aria-expanded="true">#}
+                        {#                                <i class="material-icons">more_vert</i>#}
+                        {#                            </a>#}
+                        {#                            <ul class="dropdown-menu pull-right">#}
+                        {#                                <li><a href="{% url 'profile:edit' %}"#}
+                        {#                                       class=" waves-effect waves-block">Редактировать</a></li>#}
+                        {#                            </ul>#}
+                        {#                        </li>#}
+                        {#                    </ul>#}
+                        <div class="btn-group float-right task-list-action">
+                            <div class="dropdown">
+                                <a href="#" class="btn btn-transparent default-color dropdown-hover p-0"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class=" icon-options"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end"
+                                     style="position: absolute; transform: translate3d(-144px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                    <a class="dropdown-item" href="{% url 'profile:edit' %}"> <i
+                                            class="icon-pencil text-info pr-2"></i>Редактировать</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="profile__avatar__wrapper text-center">
+                        {% if profile.avatar %}
+                            <img class="profile__avatar img-thumbnail" src="{{ profile.avatar.url }}"
+                                 alt="{{ user.get_full_name }}">
+                        {% else %}
+                            <img class="profile__avatar img-thumbnail" src="{% static '/' %}user.png"
+                                 alt="{{ user.get_full_name }}">
+                        {% endif %}
+                        <h1>{{ profile.user.username }}<br>
+                            <small>{{ profile.user.get_full_name }}</small>
+                        </h1>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-hover table-striped">
+                                <tr>
+                                    <td>Сайт</td>
+                                    <td><a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Телефон</td>
+                                    <td>{{ profile.phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Skype</td>
+                                    <td><a href="skype:{{ profile.skype }}?call">{{ profile.skype }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль VK</td>
+                                    <td>{{ profile.link_vkontakte }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль FACEBOOKе</td>
+                                    <td>{{ profile.link_facebook }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль TWITTER</td>
+                                    <td>{{ profile.link_twitter }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль INSTAGRAM</td>
+                                    <td>{{ profile.link_instagram }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль ODNOKLASNIKI</td>
+                                    <td>{{ profile.link_odnoklassniki }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Профиль МОЙ МИР</td>
+                                    <td>{{ profile.link_my_world }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-12">
+                            <h3 class="text-center">Обо мне</h3>
+                            <hr>
+                            {{ profile.description | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

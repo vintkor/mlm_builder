@@ -1,0 +1,66 @@
+{% extends 'theme_2.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load landing_tags %}
+
+{% block content %}
+
+    {% get_user_webinars user as webinars %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card mb-4 ">
+                <img class="card-img img-fluid" src="{% static '' %}page-builder.png" alt="Create premium template">
+                <div class="card-img-overlay" style="position: relative">
+                    <h4 class="card-title">Premium <span class="text-primary">Drag<span class="text-success">&</span>Drop</span> Page Builder</h4>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                    <form action="{% url 'landing:create-premium' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <select name="webinar" class="select2 form-control">
+                                        <option value="#" disabled selected>Выбрать вебинар</option>
+                                        {% for webinar in webinars %}
+                                            <option name="webinar" value="{{ webinar.id }}">{{ webinar.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <button class="btn btn-block btn-primary">Создать премиальный шаблон</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row clearfix">
+        {% for template in templates %}
+            <div class="col-md-3">
+                <div class="card mb-4 ">
+                    {% if template.image %}
+                        {% thumbnail template.image "400x300" crop="center" format="PNG" as im %}
+                            <img class="card-img img-fluid" src="{{ im.url }}" alt="{{ template.title }}">
+                        {% endthumbnail %}
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ template.title }}</h5>
+                    </div>
+                    <div class="card-footer">
+                        {% if template.is_premium %}
+                            <a class="btn btn-outline-success btn-block" href="{% url 'landing:create-premium' %}"
+                               target="_blank">Перейти в конструктор</a>
+                        {% else %}
+                            <a class="btn btn-outline-info btn-block" href="{{ template.get_absolute_url }}"
+                               target="_blank">Предпросмотр шаблона</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock content %}

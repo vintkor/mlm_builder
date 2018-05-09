@@ -1,0 +1,71 @@
+{% extends 'theme_2_login_base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+    {#    <form id="sign_in" method="POST">#}
+    {#    {% csrf_token %}#}
+    {#        <div class="msg">Sign in to start your session</div>#}
+    {#        <div class="input-group">#}
+    {#                        <span class="input-group-addon">#}
+    {#                            <i class="material-icons">person</i>#}
+    {#                        </span>#}
+    {#            <div class="form-line">#}
+    {#                {% render_field form.username class='form-control' placeholder='Логин' autofocus='true' %}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="input-group">#}
+    {#                        <span class="input-group-addon">#}
+    {#                            <i class="material-icons">lock</i>#}
+    {#                        </span>#}
+    {#            <div class="form-line">#}
+    {#                {% render_field form.password class='form-control' type="password" placeholder='Пароль' %}#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="row">#}
+    {#            <div class="col-xs-12">#}
+    {#                <button class="btn btn-block bg-pink waves-effect" type="submit">Войти</button>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#        <div class="row m-t-15 m-b--20">#}
+    {#            <div class="col-xs-6">#}
+    {#                <a href="sign-up.html">Register Now!</a>#}
+    {#            </div>#}
+    {#            <div class="col-xs-6 align-right">#}
+    {#                <a href="forgot-password.html">Forgot Password?</a>#}
+    {#            </div>#}
+    {#        </div>#}
+    {#    </form>#}
+
+    <form class="form-signin" method="post">
+        {% csrf_token %}
+        <a href="index.html" class="brand text-center">
+            <img src="{% static 'diverse/' %}assets/img/logo-dark.png"
+                 srcset="{% static 'diverse/' %}assets/img/logo-dark@2x.png 2x" alt=""/>
+        </a>
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <div class="form-group">
+            <label for="inputEmail" class="sr-only">Логин</label>
+            {% render_field form.username class='form-control' placeholder='Логин' autofocus='true' %}
+        </div>
+
+        <div class="form-group">
+            <label for="inputPassword" class="sr-only">Пароль</label>
+{#            <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>#}
+            {% render_field form.password class='form-control' type="password" placeholder='Пароль' %}
+        </div>
+
+        <div class="checkbox mb-4 mt-4">
+            <a href="forgot-password.html" class="float-right text-muted">Forgot Password ?</a>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+
+        <div class="mt-4">
+                <span>
+                    Don't have an account yet ?
+                </span>
+            <a href="signup.html" class="text-primary">Sign Up</a>
+        </div>
+    </form>
+
+{% endblock content %}

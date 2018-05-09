@@ -1,0 +1,13 @@
+<div class="btn-group float-right task-list-action">
+    <div class="dropdown">
+        <a href="#" class="btn btn-transparent default-color dropdown-hover p-0" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            <i class=" icon-options"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-144px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+            <a class="dropdown-item" href="{% url 'webinar:update' webinar.slug %}"> <i class="icon-user text-info pr-2"></i> Редактировать</a>
+            <a class="dropdown-item" href="{% url 'landing:create' webinar.id %}"> <i class="icon-globe text-info pr-2"></i> Создать лендинг</a>
+            <a class="dropdown-item" href="{% url 'webinar:delete' webinar.slug %}"><i class="icon-pencil text-danger pr-2"></i> Удалить</a>
+        </div>
+    </div>
+</div>

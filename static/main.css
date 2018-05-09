@@ -1,0 +1,100 @@
+::-moz-selection {
+    background: #000;
+    color: #eeed21;
+}
+::selection {
+    background: #000;
+    color: #eeed21;
+}
+
+.forms__errors .errorlist {
+    margin: 0;
+    padding: 0;
+}
+
+.forms__errors .errorlist li {
+    color: #d6362c;
+    list-style: none;
+}
+
+.profile__avatar {
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+}
+
+.user__package {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: 60px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.03);
+}
+
+.user__package__title,
+.user__package__date {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0 10px;
+    font-size: .9em;
+}
+
+.img-without-padding {
+    margin-left: -20px;
+    max-width: calc(100% + 40px);
+    margin-top: -20px;
+}
+
+.editLendingButton {
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 70px;
+    height: 70px;
+    background: #dd5449;
+    box-shadow: 0 0 18px rgba(0,0,0,.3);
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .3s;
+    transform: scale(.8);
+}
+
+.editLendingButton:hover {
+    background: #419c66;
+    box-shadow: 0 0 30px rgba(0,0,0,.3);
+    transform: scale(1);
+}
+
+.vertical-middle td {
+    vertical-align: middle;
+}
+
+@media (min-width: 992px) {
+    .modal-lg {
+        max-width: 1200px;
+    }
+}

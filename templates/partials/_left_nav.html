@@ -1,0 +1,60 @@
+{% load landing_tags %}
+
+<ul id="nav-accordion">
+    <li>
+        <a href="{% url 'dashboard' %}">
+            <i class="fa fa-dashboard"></i>
+            <span>Главная</span>
+        </a>
+    </li>
+
+    <li class="nav-title">
+        <h5 class="text-uppercase">Components</h5>
+    </li>
+
+    <li>
+        <a href="{% url 'package:list' %}">
+            <i class="fa fa-money"></i>
+            <span>Тарифы</span>
+        </a>
+    </li>
+
+    {% if user.is_active %}
+
+        <li class="sub-menu">
+            <a href="javascript:;">
+                <i class="fa fa-video-camera"></i>
+                <span>Вебинары</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'webinar:my_webinars' %}">Мои вебинары</a></li>
+                <li><a href="{% url 'webinar:create' %}">Добавить вебинар</a></li>
+            </ul>
+        </li>
+
+
+        <li class="sub-menu">
+            <a href="javascript:;">
+                <i class="fa fa-sitemap"></i>
+                <span>Лендинги</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'landing:list' %}">Мои лендинги</a></li>
+            </ul>
+        </li>
+
+        <li class="sub-menu">
+            <a href="javascript:;">
+                <i class="fa  fa-file-image-o"></i>
+                <span>Изображения</span>
+            </a>
+            <ul class="sub">
+                <li><a href="{% url 'images:user-images-list' %}">Мои картинки</a></li>
+                <li><a href="{% url 'images:search-image' %}">Найти картинку</a></li>
+{#                <li><a href="{% url 'images:create-image' %}">Создать новую картинку</a></li>#}
+            </ul>
+        </li>
+
+    {% endif %}
+
+</ul>

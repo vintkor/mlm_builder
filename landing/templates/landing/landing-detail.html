@@ -1,0 +1,152 @@
+{% load static %}
+
+
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url"             content="https://{{ request.META.HTTP_HOST }}{{ request.path }}" />
+    <meta property="og:type"            content="article" />
+    <meta property="og:title"           content="{{ landing.title }}" />
+    <meta property="og:description"     content="{{ landing.description }}" />
+    <meta property="fb:app_id"          content="872611946244817" />
+
+    {% if image %}
+        <meta property="og:image"           content="https://{{ request.META.HTTP_HOST }}{{ image.image.url }}" />
+        <meta property="og:image:width"     content="600" />
+        <meta property="og:image:height"    content="315" />
+    {% elif landing.image %}
+        <meta property="og:image"           content="https://{{ request.META.HTTP_HOST }}{{ landing.image.url }}" />
+        <meta property="og:image:width"     content="600" />
+        <meta property="og:image:height"    content="315" />
+    {% endif %}
+
+    <title>{{ landing.title }}</title>
+    <script src="{% static 'simple_page_builder/' %}bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="{% static 'simple_page_builder/' %}bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="{% static 'simple_page_builder/' %}bower_components/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="{% static 'simple_page_builder/' %}bower_components/sweetalert2/dist/sweetalert2.min.css">
+
+</head>
+<body class="public-view">
+<div id="sortSections" class="sortSections sortSections--full">
+
+
+{{ landing.landing_HTML | safe }}
+
+
+
+</div>
+<link rel="stylesheet" href="{% static 'simple_page_builder/' %}bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'simple_page_builder/' %}bower_components/animate.css/animate.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i,800,800i&amp;subset=cyrillic-ext" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'simple_page_builder/' %}style/main.css">
+<link rel="stylesheet" href="{% static 'simple_page_builder/' %}style/templates.css">
+
+
+</body>
+
+</html>
+
+{% csrf_token %}
+
+{% if user.is_active and user == landing.owner %}
+    <a href="{% url 'landing:edit' landing.id %}" class="editLendingButton">
+        <img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1MTIgNTEyOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjMycHgiIGhlaWdodD0iMzJweCI+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTM5Ny43MzYsNzguMzc4YzYuODI0LDAsMTIuMzU4LTUuNTMzLDEyLjM1OC0xMi4zNThWMjcuMDI3QzQxMC4wOTQsMTIuMTI1LDM5Ny45NzcsMCwzODMuMDgsMEgxMjEuNjQxICAgIGMtMy4yNzcsMC02LjQyLDEuMzAzLTguNzM5LDMuNjJMMTAuNTI3LDEwNS45OTVjLTIuMzE3LDIuMzE3LTMuNjIsNS40NjEtMy42Miw4LjczOHYzNzAuMjM5QzYuOTA4LDQ5OS44NzUsMTkuMDMyLDUxMiwzMy45MzUsNTEyICAgIGgzNDkuMTQ0YzE0Ljg5NywwLDI3LjAxNC0xMi4xMjUsMjcuMDE0LTI3LjAyN1YyOTYuMjg5YzAuMDAxLTYuODI0LTUuNTMyLTEyLjM1OC0xMi4zNTctMTIuMzU4ICAgIGMtNi44MjQsMC0xMi4zNTgsNS41MzMtMTIuMzU4LDEyLjM1OHYxODguNjg0YzAsMS4yNzQtMS4wMzEsMi4zMTEtMi4yOTcsMi4zMTFIMzMuOTM2Yy0xLjI3NCwwLTIuMzExLTEuMDM3LTIuMzExLTIuMzExdi0zNTcuODggICAgaDc1LjM2YzE0Ljg5OCwwLDI3LjAxNi0xMi4xMiwyNy4wMTYtMjcuMDE3VjI0LjcxNkgzODMuMDhjMS4yNjcsMCwyLjI5NywxLjAzNywyLjI5NywyLjMxMVY2Ni4wMiAgICBDMzg1LjM3Nyw3Mi44NDUsMzkwLjkxMSw3OC4zNzgsMzk3LjczNiw3OC4zNzh6IE0xMDkuMjg1LDEwMC4wNzVjMCwxLjI2OS0xLjAzMiwyLjMwMS0yLjMsMi4zMDFINDkuMTA3bDYwLjE3OC02MC4xOFYxMDAuMDc1eiIgZmlsbD0iI0ZGRkZGRiIvPgoJPC9nPgo8L2c+CjxnPgoJPGc+CgkJPHBhdGggZD0iTTQ5Mi44NjUsMTAwLjM5NmwtMTQuNTQxLTE0LjUzOWMtMTYuMzA0LTE2LjMwNC00Mi44MzItMTYuMzAyLTU5LjEzOCwwTDMwMy43NjMsMjAxLjI4SDEwMy41NTkgICAgYy02LjgyNSwwLTEyLjM1OCw1LjUzMy0xMi4zNTgsMTIuMzU4YzAsNi44MjUsNS41MzMsMTIuMzU4LDEyLjM1OCwxMi4zNThoMTc1LjQ4OGwtNzQuMzc5LDc0LjM3OUgxMDMuNTU5ICAgIGMtNi44MjUsMC0xMi4zNTgsNS41MzMtMTIuMzU4LDEyLjM1OHM1LjUzMywxMi4zNTgsMTIuMzU4LDEyLjM1OGg3Ni4zOTJsLTAuMTk5LDAuMTk5Yy0xLjUwOCwxLjUwOC0yLjU5OCwzLjM3OS0zLjE2OSw1LjQzMyAgICBsLTE5LjA4OCw2OC43NDdoLTUzLjkzNmMtNi44MjUsMC0xMi4zNTgsNS41MzMtMTIuMzU4LDEyLjM1OHM1LjUzMywxMi4zNTgsMTIuMzU4LDEyLjM1OGg2My4zMzJjMC4wMDEsMCwyLjcwOS0wLjMwNiwzLjEwNy0wLjQxICAgIGMwLjA2NS0wLjAxNyw3Ny45OTctMjEuNjQyLDc3Ljk5Ny0yMS42NDJjMi4wNTQtMC41NywzLjkyNi0xLjY2Miw1LjQzMy0zLjE2OWwyMzkuNDM4LTIzOS40MzUgICAgQzUwOS4xNjgsMTQzLjIyOCw1MDkuMTY4LDExNi43LDQ5Mi44NjUsMTAwLjM5NnogTTE4NC42NDQsMzk0LjA3M2wxMC4wODctMzYuMzI2bDI2LjI0LDI2LjI0TDE4NC42NDQsMzk0LjA3M3ogTTI0NC42OSwzNzIuNzUyICAgIGwtMzguNzIxLTM4LjcyMWwxOTcuNjQ4LTE5Ny42NDhsMzguNzIyLDM4LjcyMUwyNDQuNjksMzcyLjc1MnogTTQ3NS4zODcsMTQyLjA1NGwtMTUuNTcxLDE1LjU3MWwtMzguNzIyLTM4LjcyMmwxNS41NzEtMTUuNTcxICAgIGM2LjY2OS02LjY2OCwxNy41MTctNi42NjcsMjQuMTgxLDBsMTQuNTQxLDE0LjU0MUM0ODIuMDU0LDEyNC41NCw0ODIuMDU0LDEzNS4zODgsNDc1LjM4NywxNDIuMDU0eiIgZmlsbD0iI0ZGRkZGRiIvPgoJPC9nPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" alt="">
+    </a>
+{% endif %}
+
+{% if not landing.landing_code == 'PREMIUM' %}
+    <script src="{% static 'diverse/' %}assets/vendor/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" href="{% static '/' %}main.css">
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function csrfSafeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        function sameOrigin(url) {
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        var csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+{#        $('title').text('{{ landing.webinar.title }}');#}
+        var csrf = $('input[name=csrfmiddlewaretoken]').clone();
+        var form = $('form');
+        form.append(csrf);
+
+
+        function ValidateEmail(mail) {
+            if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+                return (true)
+            }
+            return (false)
+        }
+
+
+        $('.sendFormEmail').click(function (e) {
+            e.preventDefault();
+
+            if (ValidateEmail($('input[type=email]').val())) {
+                $.ajax({
+                    method: 'POST',
+                    type: 'json',
+                    url: window.location.href,
+                    data: form.serialize(),
+                    success: function (data) {
+                        if (data.success === 1) {
+                            alert('Поздравляем! Ссылка на вебинар прийдёт вам на email');
+                        } else if (data.success === 2) {
+                            alert('Вы уже регистрировались на это событие!');
+                        }
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            } else {
+                alert("Вы должны ввести валидный email!");
+            }
+
+
+        });
+    });
+
+</script>

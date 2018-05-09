@@ -1,0 +1,90 @@
+{% extends 'theme_2.html' %}
+
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <div class="card card-shadow">
+                <div class="card-header">
+                    <div class="card-title">Тарифные планы</div>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered text-center vertical-middle">
+                            <tr>
+                                <th style="width: 350px;"></th>
+                                {% for package in packages %}
+                                    <th class="{% if user.is_active and package == user.profile.package %}table-success{% endif %}">
+                                        <h5 style="margin: 0;">{{ package.title }}</h5>
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Кол-во вебинаров</td>
+                                {% for package in packages %}
+                                    <td>{{ package.get_max_webinars }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Кол-во лендингов у вебинара</td>
+                                {% for package in packages %}
+                                    <td>{{ package.get_max_lending_to_webinar }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>
+                                    Цена<br>
+                                    <span class="text-secondary">
+                                        <span class="text-danger">*</span>
+                                        При регистрации нового пользователя -
+                                        пакет предоставляется бесплатно сроком на 2 месяца
+                                    </span>
+                                </td>
+                                {% for package in packages %}
+                                    <td>
+                                        {{ package.get_price }}
+                                        {% if package.is_start_package %}<span class="text-danger">*</span>{% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>
+                                    Премиум Drag & Drop контруктор шаблонов
+                                </td>
+                                {% for package in packages %}
+                                    <td>
+                                        {% if package.can_create_premium_template %}
+                                            <i class="fa fa-2x fa-check text-success"></i>
+                                        {% else %}
+                                            <i class="fa fa-2x fa-close text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td></td>
+                                {% for package in packages %}
+                                    <td>
+                                        <form action="" method="post" class="buyPackage">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <select name="period" required class="select2">
+                                                    <option selected disabled>Выбрать период</option>
+                                                    <option name="period" value="1">1 месяц</option>
+                                                    <option name="period" value="3">3 месяца</option>
+                                                    <option name="period" value="6">6 месяцев</option>
+                                                    <option name="period" value="12">12 месяцев</option>
+                                                </select>
+                                            </div>
+                                            <input type="hidden" name="package" value="{{ package.id }}">
+                                            <button class="btn btn-block btn-success">Подписаться</button>
+                                        </form>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

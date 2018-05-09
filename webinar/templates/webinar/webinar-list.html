@@ -1,0 +1,94 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+
+{% block page_name %}
+    Список Ваших вебинаров
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на вебинар - это твой потенциальный новый партнер.
+    Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">
+        <i class="icon-graduation pr-2"></i>
+        Как с этим работать?
+    </a>
+{% endblock %}
+
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            {% for webinar in webinars %}
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            {{ webinar.title }}
+                            {% include 'webinar/partials/_webinar-actions.html' with webinar=webinar %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-md-3">
+                                {% if webinar.image %}
+                                    {% thumbnail webinar.image "300x200" crop="center" format='PNG' as im %}
+                                        <img src="{{ im.url }}" alt="{{ webinar.title }}"
+                                             class="img-thumbnail responsive-img">
+                                    {% endthumbnail %}
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <p>Автор: <b>{{ webinar.author }}</b></p>
+                                <div>{{ webinar.description | safe | truncatewords_html:20 }}</div>
+                            </div>
+                            <div class="col-md-3">
+                                {% if webinar.is_webinar_active_now %}
+                                    <div class="btn btn-success btn-block" style="cursor: inherit;">Доступен сейчас
+                                    </div>
+                                {% else %}
+                                    <div class="btn btn-danger btn-block" style="cursor: inherit;"> Не доступен сейчас
+                                    </div>
+                                {% endif %}
+                                <a href="{{ webinar.get_absolute_url }}"
+                                   class="webinarLink btn btn-outline-info btn-block">Страница вебинара</a>
+
+                                {% if webinar.landing_set.all.count == 1 %}
+                                    {% for landing in webinar.landing_set.all %}
+                                        <a target="_blank" href="{{ landing.get_absolute_url }}"
+                                           class="btn btn-outline-info btn-block">Ссылка на лендинг</a>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="btn-group show" role="group" style="width: 100%; margin-top: .5rem;">
+                                    <button type="button" class="btn btn-outline-info btn-block dropdown-toggle"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Ссылки на лендинги
+                                    </button>
+                                    <div class="dropdown-menu" x-placement="bottom-start" style="width: 100%; position: absolute; transform: translate3d(0px, 35px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                        {% for landing in webinar.landing_set.all %}
+                                            <a class="dropdown-item" href="{{ landing.get_absolute_url }}">Лендинг
+                                                №{{ forloop.counter }}</a>
+                                        {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header" style="background: #f6f6f6;">
+                        <div class="webinar__date__info">
+                            <div class="row">
+                                <div class="col-md-6">Дата старта показа: <b>{{ webinar.active_start_date }}</b></div>
+                                <div class="col-md-6 text-right">
+                                    Дата окончания показа:
+                                    <b>{{ webinar.active_end_date }}</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

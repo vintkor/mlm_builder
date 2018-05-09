@@ -1,0 +1,525 @@
+{% load static %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="MHS">
+
+    <!--favicon icon-->
+    <link rel="icon" type="image/png" href="{% static 'diverse/' %}assets/img/favicon.png">
+
+    <title>Blank Page</title>
+
+    <!--google font-->
+    <link href="//fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+
+
+    <!--common style-->
+    <link href="{% static 'diverse/' %}assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'diverse/' %}assets/vendor/lobicard/css/lobicard.css" rel="stylesheet">
+    <link href="{% static 'diverse/' %}assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="{% static 'diverse/' %}assets/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+    <link href="{% static 'diverse/' %}assets/vendor/themify-icons/css/themify-icons.css" rel="stylesheet">
+    <link href="{% static 'diverse/' %}assets/vendor/weather-icons/css/weather-icons.min.css" rel="stylesheet">
+    <link href="{% static '/' %}bower_components/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="{% static '/' %}bower_components/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="{% static '/' %}bower_components/animate.css/animate.min.css" rel="stylesheet">
+    <link href="{% static '/' %}bower_components/photobox/photobox/photobox.css" rel="stylesheet">
+
+    <!--custom css-->
+    <link href="{% static 'diverse/' %}assets/css/main.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="assets/vendor/html5shiv.js"></script>
+    <script src="assets/vendor/respond.min.js"></script>
+    <![endif]-->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-112914598-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-112914598-1');
+    </script>
+</head>
+<body class="app header-fixed left-sidebar-light left-sidebar-fixed right-sidebar-fixed right-sidebar-overlay right-sidebar-hidden">
+{#<body class="app header-fixed left-sidebar-light left-sidebar-fixed right-sidebar-fixed right-sidebar-overlay right-sidebar-hidden">#}
+
+<!--===========header start===========-->
+<header class="app-header navbar">
+
+    <!--brand start-->
+    <div class="navbar-brand">
+        <a class="text-success" href="index.html">
+            GoFriends <span class="text-primary">Networker</span>
+        </a>
+    </div>
+    <!--brand end-->
+
+    <!--left side nav toggle start-->
+    <ul class="nav navbar-nav mr-auto">
+        <li class="nav-item d-lg-none">
+            <button class="navbar-toggler mobile-leftside-toggler" type="button"><i class="ti-align-right"></i></button>
+        </li>
+        <li class="nav-item d-md-down-none">
+            <a class="nav-link navbar-toggler left-sidebar-toggler" href="#"><i class=" ti-align-right"></i></a>
+        </li>
+        <li class="nav-item d-md-down-none-">
+            <!--search start-->
+            <a class="nav-link search-toggle" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="ti-search"></i>
+            </a>
+            <div class="search-container">
+                <div class="outer-close search-toggle">
+                    <a class="close"><span></span></a>
+                </div>
+
+                <div class="container search-wrap">
+                    <div class="row">
+                        <div class="col text-left">
+                            <a class="" href="#">
+                                <img src="{% static 'diverse/' %}assets/img/logo.png"
+                                     srcset="{% static 'diverse/' %}assets/img/logo@2x.png 2x" alt="">
+                            </a>
+                            <form class="mt-3">
+                                <div class="form-row align-items-center">
+                                    <input type="text" class="form-control custom-search" aria-describedby="search"
+                                           placeholder="Search">
+                                </div>
+                            </form>
+
+                            <div class="search-list">
+                                <h5 class="text-white mb-4">Search Results</h5>
+                                <ul class="list-unstyled ">
+                                    <li>
+                                        <a href="#" class="text-white">
+                                                <span class="bg-danger">
+                                                    S
+                                                </span>
+                                            Simply dummy text of the printing
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="text-white">
+                                                <span class="bg-success">
+                                                    C
+                                                </span>
+                                            Contrary Ipsum is not simply random text
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="text-white">
+                                                <span class="bg-info">
+                                                    <i class="icon-basket-loaded "></i>
+                                                </span>
+                                            Ipsum has been industry's standard dummy
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--search end-->
+        </li>
+    </ul>
+    <!--left side nav toggle end-->
+
+    <!--right side nav start-->
+    <ul class="nav navbar-nav ml-auto">
+
+        {% if user.profile.package %}
+            <li>
+                <div class="user__package">
+                    <div class="user__package__title">Ваш тариф - <span class="badge badge-pill badge-success" style="font-size: .9em; text-transform: uppercase">{{ user.profile.package }}</span></div>
+                    <div class="user__package__date">
+                        Заканчивается {{ user.profile.package_end_date | naturaltime }}</div>
+                </div>
+            </li>
+        {% endif %}
+
+
+        <li class="nav-item dropdown dropdown-slide d-md-down-none">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class="ti-bell"></i>
+                <span class="badge badge-danger notification-alarm"> </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+
+                <div class="dropdown-header pb-3">
+                    <strong>You have 6 Notifications</strong>
+                </div>
+
+                <a href="#" class="dropdown-item">
+                    <i class="icon-basket-loaded text-primary"></i> New order
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class="icon-user-follow text-success"></i> New registered member
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class=" icon-layers text-danger"></i> Server error report
+                </a>
+                <a href="#" class="dropdown-item">
+                    <i class=" icon-note text-warning"></i> Database report
+                </a>
+
+                <a href="#" class="dropdown-item">
+                    <i class=" icon-present text-info"></i> Order confirmation
+                </a>
+
+            </div>
+        </li>
+        <li class="nav-item dropdown dropdown-slide d-md-down-none">
+            <a class="nav-link nav-pill" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <i class=" ti-view-grid"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-ql-gird">
+
+                <div class="dropdown-header pb-3">
+                    <strong>Quick Links</strong>
+                </div>
+
+                <div class="quick-links-grid">
+                    <a href="#" class="ql-grid-item">
+                        <i class="  ti-files text-primary"></i>
+                        <span class="ql-grid-title">New Task</span>
+                    </a>
+                    <a href="#" class="ql-grid-item">
+                        <i class="  ti-check-box text-success"></i>
+                        <span class="ql-grid-title">Assign Task</span>
+                    </a>
+                </div>
+                <div class="quick-links-grid">
+                    <a href="#" class="ql-grid-item">
+                        <i class="  ti-truck text-warning"></i>
+                        <span class="ql-grid-title">Create Orders</span>
+                    </a>
+                    <a href="#" class="ql-grid-item">
+                        <i class=" icon-layers text-info"></i>
+                        <span class="ql-grid-title">New Orders</span>
+                    </a>
+                </div>
+
+            </div>
+        </li>
+
+        <li class="nav-item dropdown dropdown-slide">
+
+            <a class="nav-link nav-pill user-avatar" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                {% if user.profile.avatar %}
+                    <img src="{{ user.profile.avatar.url }}" alt="{{ user.get_full_name }}">
+                {% else %}
+                    <img src="{% static 'diverse/' %}assets/img/user.png" alt="{{ user.get_full_name }}">
+                {% endif %}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-accout">
+                <div class="dropdown-header pb-3">
+                    <div class="media d-user">
+                        {% if user.profile.avatar %}
+                            <img class="align-self-center mr-3" src="{% static 'diverse/' %}assets/img/user.png" alt="{{ user.get_full_name }}">
+                        {% else %}
+                            <img class="align-self-center mr-3" src="{% static 'diverse/' %}assets/img/user.png" alt="{{ user.get_full_name }}">
+                        {% endif %}
+
+                        <div class="media-body">
+                            <h5 class="mt-0 mb-0">{{ user.get_full_name }}</h5>
+                            <span>{{ user.email }}</span>
+                        </div>
+                    </div>
+                </div>
+                <a class="dropdown-item"><i class="ti-money text-info pr-2"></i> На вашем балансе {{ user.profile.balance }}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'profile:detail' %}"><i class="icon-user text-info pr-2"></i> Профиль</a>
+                <a class="dropdown-item" href="{% url 'profile:edit' %}"><i class="icon-pencil text-info pr-2"></i> Редактировать</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'profile:logout' %}"><i class="ti-unlock text-danger pr-2"></i> Выйти</a>
+            </div>
+        </li>
+
+        <!--right side toggler-->
+        <li class="nav-item d-lg-none">
+            <button class="navbar-toggler mobile-rightside-toggler" type="button"><i class="icon-options-vertical"></i>
+            </button>
+        </li>
+        <li class="nav-item d-md-down-none">
+            <a class="nav-link navbar-toggler right-sidebar-toggler" href="#"><i class="icon-options-vertical"></i></a>
+        </li>
+    </ul>
+
+    <!--right side nav end-->
+</header>
+<!--===========header end===========-->
+
+<!--===========app body start===========-->
+<div class="app-body">
+
+    <!--left sidebar start-->
+    <div class="left-sidebar">
+        <nav class="sidebar-menu">
+            {% include 'partials/_left_nav.html' %}
+        </nav>
+    </div>
+    <!--left sidebar end-->
+
+    <!--main contents start-->
+    <main class="main-content">
+        <!--page title start-->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="page-title">
+                        <h4 class="mb-0">{% block page_name %}{% endblock %}</h4>
+                        <span>{% block page_small_name %}{% endblock %}</span>
+                    </div>
+                </div>
+                <div class="col-md-3 text-right">
+                    <div class="page-title">
+                        {% block help_link %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--page title end-->
+
+        <div class="container-fluid">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible"
+                         style="border-radius: 0; margin-bottom: 20px;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </div>
+
+    </main>
+    <!--main contents end-->
+
+    <!--right sidebar start-->
+    <aside class="right-sidebar">
+
+        <!--notification widget start-->
+        <div class="widget">
+            <h3 class="mb-4 widget-title">Notification</h3>
+
+            <div class="notification-list">
+                <ul class="list-unstyled">
+                    <li>
+                        <div class="nt-thumb mr-3">
+                            <img src="{% static 'diverse/' %}assets/img/n1.png" alt=""/>
+                        </div>
+                        <div class="nt-info">
+                            <a href="#" class="nt-title">Diverse Ltd.</a>
+                            <small class="text-muted">2 days ago</small>
+                            <p><a href="#">www.diverse-test.com</a></p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="nt-thumb mr-3">
+                            <img src="{% static 'diverse/' %}assets/img/n3.png" alt=""/>
+                        </div>
+                        <div class="nt-info">
+                            <a href="#" class="nt-title">Black Friday Discount Offer</a>
+                            <small class="text-muted">2 days ago</small>
+                            <p>Nam libero tempore cum soluta nobis est eligendi.</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="nt-thumb mr-3">
+                            <img src="{% static 'diverse/' %}assets/img/n2.png" alt=""/>
+                        </div>
+                        <div class="nt-info">
+                            <a href="#" class="nt-title">Task Failed</a>
+                            <small class="text-muted">2 days ago</small>
+                            <p>Error: Invalid command found ... after [this class]</p>
+                        </div>
+                    </li>
+
+                    <li>
+                        <div class="nt-thumb mr-3">
+                            <img src="{% static 'diverse/' %}assets/img/n4.png" alt=""/>
+                        </div>
+                        <div class="nt-info">
+                            <a href="#" class="nt-title">John Doe</a>
+                            <small class="text-muted">3 days ago</small>
+                            <p>Send you a contact request.</p>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!--notification widget end-->
+
+        <!--Active log widget start-->
+        <div class="widget">
+            <h3 class="mb-4 widget-title">Activity Log</h3>
+            <div class="baseline baseline-border">
+                <div class="baseline-list">
+                    <div class="baseline-info">
+                        <div><a href="#" class="default-color"><strong>John Tasi</strong></a> Prepare for the Meeting
+                            <span class="badge badge-pill badge-success">status</span></div>
+                        <span class="text-muted">10:00 PM Sat, 10 Jan 2018</span>
+                    </div>
+                </div>
+                <div class="baseline-list baseline-border baseline-primary">
+                    <div class="baseline-info">
+                        <div>Video conference to client</div>
+                        <span class="text-muted">05:00 PM Sun, 02 Feb 2018</span>
+                    </div>
+                </div>
+                <div class="baseline-list  baseline-border baseline-success">
+                    <div class="baseline-info">
+                        <div><a href="#" class="default-color"><strong>Tnisha</strong></a> Submit a blog post <a
+                                href="#" class="">best admin template in 2018.</a></div>
+                        <span class="text-muted">10:00 PM Sat, 10 Jan 2018</span>
+                    </div>
+                </div>
+                <div class="baseline-list  baseline-border baseline-warning">
+                    <div class="baseline-info">
+                        <div><a href="#" class="default-color"><strong>New Request</strong></a> 10 user request to
+                            approve or remove
+                        </div>
+                        <span class="text-muted">10:00 PM Sat, 10 Jan 2018</span>
+                    </div>
+                </div>
+                <div class="baseline-list  baseline-border baseline-info">
+                    <div class="baseline-info">
+                        <div><a href="#" class="default-color"><strong>Mark Henry</strong></a> added your friend list
+                            now
+                        </div>
+                        <span class="text-muted">10:00 PM Sat, 10 Jan 2018</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Active log widget end-->
+
+        <!--stock widget start-->
+        <div class="widget">
+            <h3 class="mb-4 widget-title">Stocks</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>DOW</td>
+                        <td>1999</td>
+                        <td>
+                            <span class="badge badge-pill badge-primary">+ 0.10%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>AAPL</td>
+                        <td>1299</td>
+                        <td>
+                            <span class="badge badge-pill badge-success">- 0.50%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>SBUX</td>
+                        <td>1099</td>
+                        <td>
+                            <span class="badge badge-pill badge-danger">+ 0.20%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>NKE</td>
+                        <td>2199</td>
+                        <td>
+                            <span class="badge badge-pill badge-warning">+ 1.25%</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>YOO</td>
+                        <td>999</td>
+                        <td>
+                            <span class="badge badge-pill badge-info">+ 3.00%</span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--stock widget end-->
+
+    </aside>
+    <!--right sidebar end-->
+
+</div>
+<!--===========app body end===========-->
+
+<!--===========footer start===========-->
+<footer class="app-footer">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-8">
+                {% now "Y" %} © <a href="//gofriends.pro" target="_blank"><span class="text-success">Go</span>Friends</a>
+            </div>
+            <div class="col-4">
+                <a href="#" class="float-right back-top">
+                    <i class=" ti-arrow-circle-up"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!--===========footer end===========-->
+
+
+<!-- Placed js at the end of the page so the pages load faster -->
+<script src="{% static 'diverse/' %}assets/vendor/jquery/jquery.min.js"></script>
+<script src="{% static 'diverse/' %}assets/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script src="{% static 'diverse/' %}assets/vendor/popper.min.js"></script>
+<script src="{% static '/' %}bower_components/sweetalert2/dist/sweetalert2.min.js"></script>
+
+<script type="text/javascript" src="{% static '/' %}bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="{% static '/' %}bower_components/moment/min/locales.min.js"></script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"/>
+
+
+<script src="{% static 'diverse/' %}assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="{% static 'diverse/' %}assets/vendor/jquery-ui-touch/jquery.ui.touch-punch-improved.js"></script>
+<script src="{% static 'diverse/' %}assets/vendor/lobicard/js/lobicard.js"></script>
+<script class="include" type="text/javascript" src="{% static 'diverse/' %}assets/vendor/jquery.dcjqaccordion.2.7.js"></script>
+<script src="{% static 'diverse/' %}assets/vendor/jquery.scrollTo.min.js"></script>
+<script src="{% static '/' %}bower_components/inputmask/dist/min/jquery.inputmask.bundle.min.js"></script>
+<script src="{% static '/' %}bower_components/select2/dist/js/select2.full.min.js"></script>
+<script src="{% static '/' %}bower_components/photobox/photobox/jquery.photobox.js"></script>
+
+
+
+<!--[if lt IE 9]>
+    <script src="assets/vendor/modernizr.js"></script>
+    <![endif]-->
+
+<!--init scripts-->
+<script src="{% static 'diverse/' %}assets/js/scripts.min.js"></script>
+
+{% block footer_scripts %}{% endblock %}
+
+<link rel="stylesheet" href="{% static '/' %}main.css">
+
+<script src="{% static '/' %}main.js"></script>
+
+</body>
+</html>

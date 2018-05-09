@@ -1,0 +1,53 @@
+{% extends 'theme_2.html' %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+
+    <div class="row clearfix" id="webinarUpdateForm">
+        <div class="col-md-12">
+            <div class="card card-shadow">
+                <div class="card-header">
+                    {% if webinar %}
+                    <div class="card-title">{{ webinar.title }}</div>
+                    {% else %}
+                        <div class="card-title">Создание нового вебинара</div>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <div class="form-line {% if field.errors %}error{% endif %}">
+                                    {{ field }}
+                                </div>
+                            </div>
+                            <div class="error forms__errors">{{ field.errors }}</div>
+                        {% endfor %}
+                        <button class="btn btn-success btn-lg">Сохранить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer_scripts %}
+    {% get_current_language as LANGUAGE_CODE %}
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+
+    <script>
+
+    $("#id_active_start_date, #id_active_end_date").datetimepicker({
+        timepicker: true,
+        format: 'd.m.Y H:i',
+        lang:'ru',
+        minDate: new Date()
+    });
+
+    </script>
+{% endblock %}

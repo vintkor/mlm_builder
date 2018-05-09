@@ -1,0 +1,70 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    Список Ваших изображений
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на лендинг с другим изображением повышает шанс получить нового партнёра. Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">Как с этим работать?</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        {% for user_image in images %}
+            <div class="col-md-3 imageCard">
+                <div class="card mb-4 card-shadow">
+                    <img id="imageImage-{{ user_image.id }}" class="card-img-top img-fluid" src="{{ user_image.image.url }}" alt="{{ user_image.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" id="imageTitle-{{ user_image.id }}">{{ user_image.title }}</h5>
+                        <a class="btn btn-square btn-outline-primary btn-lg showMyLendingModal"
+                                data-image="{{ user_image.id }}" href="{% url 'images:detail-image' user_image.id %}"
+                        >
+                            Связаные лендинги {{ user_image.count_landings }}
+                        </a>
+                        <a class="btn btn-square btn-outline-danger btn-lg pull-right deleteMyImage" href="{% url 'images:delete-image' user_image.pk %}">
+                            <i class="ti-trash"></i>
+                        </a>
+                        <a class="btn btn-square btn-outline-warning btn-lg pull-right" href="{% url 'images:create-image' user_image.pk %}">
+                            <i class=" icon-magic-wand "></i>
+                        </a>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="MyLendingModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="MyLendingModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <img src="" id="modalImage" class="img-fluid rounded">
+                    <hr>
+                    <ul class="list-group" id="modalListGroup"></ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block footer_scripts %}{% endblock footer_scripts %}

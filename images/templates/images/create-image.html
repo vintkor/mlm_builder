@@ -1,0 +1,1358 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    Создание нового изображения
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на лендинг с другим изображением повышает шанс получить нового партнёра. Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">Как с этим работать?</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="">
+        <a class="text-info" target="_blank" href="https://github.com/nhnent/tui.image-editor">image-editor</a>
+        <a class="text-info" target="_blank" href="http://nhnent.github.io/tui.image-editor/latest/tutorial-example01-basic.html">example</a>
+    </div>
+
+    <ul class="menu">
+        <li class="menu-item btn btn-outline-info disabled" id="btn-undo">Назад</li>
+        <li class="menu-item btn btn-outline-info disabled" id="btn-redo">Вперёд</li>
+        <li class="menu-item btn btn-outline-info" id="btn-clear-objects">Очистить</li>
+        <li class="menu-item btn btn-outline-info" id="btn-remove-active-object">Удалить активные объекты</li>
+        <li class="menu-item btn btn-outline-info" id="btn-crop">Обрезка</li>
+        <li class="menu-item btn btn-outline-info" id="btn-flip">Отражение</li>
+        <li class="menu-item btn btn-outline-info" id="btn-rotation">Поворот</li>
+        <li class="menu-item btn btn-outline-info" id="btn-draw-line">Линия</li>
+{#        <li class="menu-item btn btn-outline-info" id="btn-draw-shape">Shape</li>#}
+        <li class="menu-item btn btn-outline-info" id="btn-add-icon">Иконка</li>
+        <li class="menu-item btn btn-outline-info" id="btn-text">Текст</li>
+        <li class="menu-item btn btn-outline-info" id="btn-mask-filter">Маска</li>
+{#        <li class="menu-item btn btn-outline-info" id="btn-image-filter">Фильтр</li>#}
+    </ul>
+    <br>
+    <div class="sub-menu-container" id="crop-sub-menu">
+        <ul class="menu">
+            <li class="menu-item" id="btn-apply-crop">Применить</li>
+            <li class="menu-item" id="btn-cancel-crop">Отмена</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="flip-sub-menu">
+        <ul class="menu">
+            <li class="menu-item" id="btn-flip-x">FlipX</li>
+            <li class="menu-item" id="btn-flip-y">FlipY</li>
+            <li class="menu-item" id="btn-reset-flip">Reset</li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="rotation-sub-menu">
+        <ul class="menu">
+            <li class="menu-item" id="btn-rotate-clockwise">Clockwise(30)</li>
+            <li class="menu-item" id="btn-rotate-counter-clockwise">Counter-Clockwise(-30)</li>
+            <li class="menu-item no-pointer"><label>Range input<input id="input-rotation-range" type="range" min="-360"
+                                                                      value="0" max="360"></label></li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container menu" id="draw-line-sub-menu">
+        <ul class="menu">
+            <li class="menu-item">
+                <label><input type="radio" name="select-line-type" value="freeDrawing" checked="checked"> Free
+                    drawing</label>
+                <label><input type="radio" name="select-line-type" value="lineDrawing"> Straight line</label>
+            </li>
+            <li class="menu-item">
+                <div id="tui-brush-color-picker">Brush color</div>
+            </li>
+            <li class="menu-item"><label class="menu-item no-pointer">Brush width<input id="input-brush-width-range"
+                                                                                        type="range" min="5" max="30"
+                                                                                        value="12"></label></li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="draw-shape-sub-menu">
+        <ul class="menu">
+            <li class="menu-item">
+                <label><input type="radio" name="select-shape-type" value="rect" checked="checked"> rect</label>
+                <label><input type="radio" name="select-shape-type" value="circle"> circle</label>
+                <label><input type="radio" name="select-shape-type" value="triangle"> triangle</label>
+            </li>
+            <li class="menu-item">
+                <select name="select-color-type">
+                    <option value="fill">Fill</option>
+                    <option value="stroke">Stroke</option>
+                </select>
+                <label><input type="checkbox" id="input-check-transparent">transparent</label>
+                <div id="tui-shape-color-picker"></div>
+            </li>
+            <li class="menu-item"><label class="menu-item no-pointer">Stroke width<input id="input-stroke-width-range"
+                                                                                         type="range" min="0" max="300"
+                                                                                         value="12"></label></li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="icon-sub-menu">
+        <ul class="menu">
+            <li class="menu-item">
+                <div id="tui-icon-color-picker">Icon color</div>
+            </li>
+            <li class="menu-item border" id="btn-register-icon">Register custom icon</li>
+            <li class="menu-item icon-text" data-icon-type="arrow">➡</li>
+            <li class="menu-item icon-text" data-icon-type="cancel">✖</li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="text-sub-menu">
+        <ul class="menu">
+            <li class="menu-item">
+                <div>
+                    <button class="btn-text-style" data-style-type="b">Bold</button>
+                    <button class="btn-text-style" data-style-type="i">Italic</button>
+                    <button class="btn-text-style" data-style-type="u">Underline</button>
+                </div>
+                <div>
+                    <button class="btn-text-style" data-style-type="l">Left</button>
+                    <button class="btn-text-style" data-style-type="c">Center</button>
+                    <button class="btn-text-style" data-style-type="r">Right</button>
+                </div>
+            </li>
+            <li class="menu-item"><label class="no-pointer"><input id="input-font-size-range" type="range" min="10"
+                                                                   max="100" value="10"></label></li>
+            <li class="menu-item">
+                <div id="tui-text-color-picker">Text color</div>
+            </li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="filter-sub-menu">
+        <ul class="menu">
+            <li class="menu-item border input-wrapper">
+                Load Mask Image
+                <input type="file" accept="image/*" id="input-mask-image-file">
+            </li>
+            <li class="menu-item" id="btn-apply-mask">Apply mask filter</li>
+            <li class="menu-item close">Close</li>
+        </ul>
+    </div>
+    <div class="sub-menu-container" id="image-filter-sub-menu">
+        <ul class="menu">
+            <li class="menu-item align-left-top">
+                <table>
+                    <tbody>
+                    <tr>
+                        <td><label><input type="checkbox" id="input-check-grayscale">Grayscale</label></td>
+                        <td><label><input type="checkbox" id="input-check-invert">Invert</label></td>
+                        <td><label><input type="checkbox" id="input-check-sepia">Сепия</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" id="input-check-sepia2">Сепия 2</label></td>
+                        <td><label><input type="checkbox" id="input-check-blur">Размытие</label></td>
+                        <td><label><input type="checkbox" id="input-check-sharpen">Sharpen</label></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" id="input-check-emboss">Emboss</label></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-remove-white">Удалить Белый</label><br>
+                    <label>Threshold<input class="range-narrow" id="input-range-remove-white-threshold" type="range"
+                                           min="0" value="60" max="255"></label><br>
+                    <label>Distance<input class="range-narrow" id="input-range-remove-white-distance" type="range"
+                                          min="0" value="10" max="255"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-brightness">Яркость</label><br>
+                    <label>Value<input class="range-narrow" id="input-range-brightness-value" type="range" min="-255"
+                                       value="100" max="255"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-noise">Шум</label><br>
+                    <label>Value<input class="range-narrow" id="input-range-noise-value" type="range" min="0"
+                                       value="100" max="1000"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox"
+                                  id="input-check-gradient-transparancy">GradientTransparency</label><br>
+                    <label>Value<input class="range-narrow" id="input-range-gradient-transparency-value" type="range"
+                                       min="0" value="100" max="255"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-pixelate">Pixelate</label><br>
+                    <label>Value<input class="range-narrow" id="input-range-pixelate-value" type="range" min="2"
+                                       value="4" max="20"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-tint">Tint</label><br>
+                <div id="tui-tint-color-picker"></div>
+                <label>Opacity<input class="range-narrow" id="input-range-tint-opacity-value" type="range" min="0"
+                                     value="1" max="1" step="0.1"></label>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-multiply">Multiply</label>
+                <div id="tui-multiply-color-picker"></div>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-blend">Blend</label>
+                <div id="tui-blend-color-picker"></div>
+                <select name="select-blend-type">
+                    <option value="add" selected>Add</option>
+                    <option value="diff">Diff</option>
+                    <option value="diff">Subtract</option>
+                    <option value="multiply">Multiply</option>
+                    <option value="screen">Screen</option>
+                    <option value="lighten">Lighten</option>
+                    <option value="darken">Darken</option>
+                </select>
+                </p>
+            </li>
+            <li class="menu-item align-left-top">
+                <p>
+                    <label><input type="checkbox" id="input-check-color-filter">ColorFilter</label><br>
+                    <label>Threshold<input class="range-narrow" id="input-range-color-filter-value" type="range" min="0"
+                                           value="45" max="255"></label>
+                </p>
+            </li>
+            <li class="menu-item close">Закрыть</li>
+        </ul>
+    </div>
+
+    <div class="tui-image-editor"></div>
+
+    <div class="text-center">
+        <br>
+        <button class="btn btn-primary" id="btn-download">Сохранить в мои картинки</button>
+    </div>
+
+{% endblock content %}
+
+{% block footer_scripts %}
+    <script src="{% static 'bower_components/tui-code-snippet/dist/tui-code-snippet.min.js' %}"></script>
+    <script src="{% static 'bower_components/fabric/dist/fabric.min.js' %}"></script>
+    <script src="{% static 'bower_components/tui-image-editor/dist/tui-image-editor.min.js' %}"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/nhnent/tui.component.colorpicker/1.0.2/dist/colorpicker.min.js"></script>
+    <link type="text/css" href="https://cdn.rawgit.com/nhnent/tui.color-picker/v2.0.0/dist/tui-color-picker.css" rel="stylesheet">
+
+    <style>
+        .border {
+            border: 1px solid black;
+        }
+
+        .body-container {
+            width: 1000px;
+        }
+
+        .tui-image-editor-controls {
+            min-height: 250px;
+        }
+
+        .menu {
+            padding: 0;
+            margin-bottom: 5px;
+            text-align: center;
+            color: #544B61;
+            font-weight: 400;
+            list-style-type: none;
+            user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .header .name {
+            padding: 10px;
+            line-height: 50px;
+            font-size: 30px;
+            font-weight: 100;
+            vertical-align: middle;
+        }
+
+        .header .menu {
+            display: inline-block;
+        }
+
+        .menu-item {
+            padding: 10px;
+            display: inline-block;
+            cursor: pointer;
+            vertical-align: middle;
+        }
+        {##}
+        {#.menu-item a {#}
+        {#    text-decoration: none;#}
+        {#}#}
+        {##}
+        {#.menu-item.no-pointer {#}
+        {#    cursor: default;#}
+        {#}#}
+        {##}
+        {#.menu-item.active,#}
+        {#.menu-item:hover {#}
+        {#    background-color: #f3f3f3;#}
+        {#}#}
+        {##}
+        {#.menu-item.disabled {#}
+        {#    cursor: default;#}
+        {#    color: #BFBEBE;#}
+        {#}#}
+
+        .align-left-top {
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .range-narrow {
+            width: 80px;
+        }
+
+        .sub-menu-container {
+            font-size: 14px;
+            margin-bottom: 1em;
+            display: none;
+        }
+
+        .tui-image-editor {
+            {#height: 500px;#}
+            width: auto;
+        }
+
+        .tui-image-editor-canvas-container {
+            margin: 0 auto;
+            top: 50%;
+            transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            -moz-transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+            border: 1px dashed black;
+            overflow: hidden;
+        }
+
+        .tui-colorpicker-container {
+            margin: 5px auto 0;
+        }
+
+        .tui-colorpicker-palette-toggle-slider {
+            display: none;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            cursor: pointer;
+            position: absolute;
+            font-size: 999px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .btn-text-style {
+            padding: 5px;
+            margin: 3px 1px;
+            border: 1px dashed #bfbebe;
+            outline: 0;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .icon-text {
+            font-size: 20px;
+        }
+
+        .select-line-type {
+            outline: 0;
+            vertical-align: middle;
+        }
+
+        #tui-color-picker {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        #tui-text-palette {
+            display: none;
+            position: absolute;
+            padding: 10px;
+            border: 1px solid #bfbebe;
+            background-color: #fff;
+            z-index: 9999;
+        }
+
+    </style>
+
+    <script>
+    // var imageEditor = new tui.ImageEditor('#my-image-editor canvas', {
+    //     cssMaxWidth: 1000,
+    //     cssMaxHeight: 800
+    // });
+    //
+    // imageEditor.loadImageFromURL('../../../media/FilterImage.png', 'My sample image');
+
+
+    var supportingFileAPI = !!(window.File && window.FileList && window.FileReader);
+    var rImageType = /data:(image\/.+);base64,/;
+    var shapeOptions = {};
+    var shapeType;
+    var activeObjectId;
+
+    // Buttons
+    var $btns = $('.menu-item');
+    var $btnsActivatable = $btns.filter('.activatable');
+    var $inputImage = $('#input-image-file');
+    var $btnDownload = $('#btn-download');
+
+    var $btnUndo = $('#btn-undo');
+    var $btnRedo = $('#btn-redo');
+    var $btnClearObjects = $('#btn-clear-objects');
+    var $btnRemoveActiveObject = $('#btn-remove-active-object');
+    var $btnCrop = $('#btn-crop');
+    var $btnFlip = $('#btn-flip');
+    var $btnRotation = $('#btn-rotation');
+    var $btnDrawLine = $('#btn-draw-line');
+    var $btnDrawShape = $('#btn-draw-shape');
+    var $btnApplyCrop = $('#btn-apply-crop');
+    var $btnCancelCrop = $('#btn-cancel-crop');
+    var $btnFlipX = $('#btn-flip-x');
+    var $btnFlipY = $('#btn-flip-y');
+    var $btnResetFlip = $('#btn-reset-flip');
+    var $btnRotateClockwise = $('#btn-rotate-clockwise');
+    var $btnRotateCounterClockWise = $('#btn-rotate-counter-clockwise');
+    var $btnText = $('#btn-text');
+    var $btnTextStyle = $('.btn-text-style');
+    var $btnAddIcon = $('#btn-add-icon');
+    var $btnRegisterIcon = $('#btn-register-icon');
+    var $btnMaskFilter = $('#btn-mask-filter');
+    var $btnImageFilter = $('#btn-image-filter');
+    var $btnLoadMaskImage = $('#input-mask-image-file');
+    var $btnApplyMask = $('#btn-apply-mask');
+    var $btnClose = $('.close');
+
+    // Input etc.
+    var $inputRotationRange = $('#input-rotation-range');
+    var $inputBrushWidthRange = $('#input-brush-width-range');
+    var $inputFontSizeRange = $('#input-font-size-range');
+    var $inputStrokeWidthRange = $('#input-stroke-width-range');
+    var $inputCheckTransparent = $('#input-check-transparent');
+    var $inputCheckGrayscale = $('#input-check-grayscale');
+    var $inputCheckInvert = $('#input-check-invert');
+    var $inputCheckSepia = $('#input-check-sepia');
+    var $inputCheckSepia2 = $('#input-check-sepia2');
+    var $inputCheckBlur = $('#input-check-blur');
+    var $inputCheckSharpen = $('#input-check-sharpen');
+    var $inputCheckEmboss = $('#input-check-emboss');
+    var $inputCheckRemoveWhite = $('#input-check-remove-white');
+    var $inputRangeRemoveWhiteThreshold = $('#input-range-remove-white-threshold');
+    var $inputRangeRemoveWhiteDistance = $('#input-range-remove-white-distance');
+    var $inputCheckBrightness = $('#input-check-brightness');
+    var $inputRangeBrightnessValue = $('#input-range-brightness-value');
+    var $inputCheckNoise = $('#input-check-noise');
+    var $inputRangeNoiseValue = $('#input-range-noise-value');
+    var $inputCheckGradientTransparency = $('#input-check-gradient-transparancy');
+    var $inputRangeGradientTransparencyValue = $('#input-range-gradient-transparency-value');
+    var $inputCheckPixelate = $('#input-check-pixelate');
+    var $inputRangePixelateValue = $('#input-range-pixelate-value');
+    var $inputCheckTint = $('#input-check-tint');
+    var $inputRangeTintOpacityValue = $('#input-range-tint-opacity-value');
+    var $inputCheckMultiply = $('#input-check-multiply');
+    var $inputCheckBlend = $('#input-check-blend');
+    var $inputCheckColorFilter = $('#input-check-color-filter');
+    var $inputRangeColorFilterValue = $('#input-range-color-filter-value');
+
+    // Sub menus
+    var $displayingSubMenu = $();
+    var $cropSubMenu = $('#crop-sub-menu');
+    var $flipSubMenu = $('#flip-sub-menu');
+    var $rotationSubMenu = $('#rotation-sub-menu');
+    var $freeDrawingSubMenu = $('#free-drawing-sub-menu');
+    var $drawLineSubMenu = $('#draw-line-sub-menu');
+    var $drawShapeSubMenu = $('#draw-shape-sub-menu');
+    var $textSubMenu = $('#text-sub-menu');
+    var $iconSubMenu = $('#icon-sub-menu');
+    var $filterSubMenu = $('#filter-sub-menu');
+    var $imageFilterSubMenu = $('#image-filter-sub-menu');
+
+    // Select line type
+    var $selectLine = $('[name="select-line-type"]');
+
+    // Select shape type
+    var $selectShapeType = $('[name="select-shape-type"]');
+
+    // Select color of shape type
+    var $selectColorType = $('[name="select-color-type"]');
+
+    //Select blend type
+    var $selectBlendType = $('[name="select-blend-type"]');
+
+    // Image editor
+    var imageEditor = new tui.ImageEditor('.tui-image-editor', {
+        cssMaxWidth: 700,
+        cssMaxHeight: 500,
+        selectionStyle: {
+            cornerSize: 20,
+            rotatingPointOffset: 70
+        }
+    });
+
+    // Color picker for free drawing
+    var brushColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-brush-color-picker')[0],
+        color: '#000000'
+    });
+
+    // Color picker for text palette
+    var textColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-text-color-picker')[0],
+        color: '#000000'
+    });
+
+    // Color picker for shape
+    var shapeColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-shape-color-picker')[0],
+        color: '#000000'
+    });
+
+    // Color picker for icon
+    var iconColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-icon-color-picker')[0],
+        color: '#000000'
+    });
+
+    var tintColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-tint-color-picker')[0],
+        color: '#000000'
+    });
+
+    var multiplyColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-multiply-color-picker')[0],
+        color: '#000000'
+    });
+
+    var blendColorpicker = tui.component.colorpicker.create({
+        container: $('#tui-blend-color-picker')[0],
+        color: '#00FF00'
+    });
+
+    // Common global functions
+    // HEX to RGBA
+    function hexToRGBa(hex, alpha) {
+        var r = parseInt(hex.slice(1, 3), 16);
+        var g = parseInt(hex.slice(3, 5), 16);
+        var b = parseInt(hex.slice(5, 7), 16);
+        var a = alpha || 1;
+
+        return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+    }
+
+    function base64ToBlob(data) {
+        var mimeString = '';
+        var raw, uInt8Array, i, rawLength;
+
+        raw = data.replace(rImageType, function(header, imageType) {
+            mimeString = imageType;
+
+            return '';
+        });
+
+        raw = atob(raw);
+        rawLength = raw.length;
+        uInt8Array = new Uint8Array(rawLength); // eslint-disable-line
+
+        for (i = 0; i < rawLength; i += 1) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+
+        return new Blob([uInt8Array], {type: mimeString});
+    }
+
+    function resizeEditor() {
+        var $editor = $('.tui-image-editor');
+        var $container = $('.tui-image-editor-canvas-container');
+        var height = parseFloat($container.css('max-height'));
+
+        $editor.height(height);
+    }
+
+    function getBrushSettings() {
+        var brushWidth = $inputBrushWidthRange.val();
+        var brushColor = brushColorpicker.getColor();
+
+        return {
+            width: brushWidth,
+            color: hexToRGBa(brushColor, 0.5)
+        };
+    }
+
+    function activateShapeMode() {
+        if (imageEditor.getDrawingMode() !== 'SHAPE') {
+            imageEditor.stopDrawingMode();
+            imageEditor.startDrawingMode('SHAPE');
+        }
+    }
+
+    function activateIconMode() {
+        imageEditor.stopDrawingMode();
+    }
+
+    function activateTextMode() {
+        if (imageEditor.getDrawingMode() !== 'TEXT') {
+            imageEditor.stopDrawingMode();
+            imageEditor.startDrawingMode('TEXT');
+        }
+    }
+
+    function setTextToolbar(obj) {
+        var fontSize = obj.fontSize;
+        var fontColor = obj.fill;
+
+        $inputFontSizeRange.val(fontSize);
+        textColorpicker.setColor(fontColor);
+    }
+
+    function setIconToolbar(obj) {
+        var iconColor = obj.fill;
+
+        iconColorpicker.setColor(iconColor);
+    }
+
+    function setShapeToolbar(obj) {
+        var strokeColor, fillColor, isTransparent;
+        var colorType = $selectColorType.val();
+
+        if (colorType === 'stroke') {
+            strokeColor = obj.stroke;
+            isTransparent = (strokeColor === 'transparent');
+
+            if (!isTransparent) {
+                shapeColorpicker.setColor(strokeColor);
+            }
+        } else if (colorType === 'fill') {
+            fillColor = obj.fill;
+            isTransparent = (fillColor === 'transparent');
+
+            if (!isTransparent) {
+                shapeColorpicker.setColor(fillColor);
+            }
+        }
+
+        $inputCheckTransparent.prop('checked', isTransparent);
+        $inputStrokeWidthRange.val(obj.strokeWidth);
+    }
+
+    function showSubMenu(type) {
+        var $submenu;
+
+        switch (type) {
+            case 'shape':
+                $submenu = $drawShapeSubMenu;
+                break;
+            case 'icon':
+                $submenu = $iconSubMenu;
+                break;
+            case 'text':
+                $submenu = $textSubMenu;
+                break;
+            default:
+                $submenu = 0;
+        }
+
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $submenu.show();
+    }
+
+    function applyOrRemoveFilter(applying, type, options) {
+        if (applying) {
+            imageEditor.applyFilter(type, options).then(result => {
+                console.log(result);
+            });
+        } else {
+            imageEditor.removeFilter(type);
+        }
+    }
+
+    // Attach image editor custom events
+    imageEditor.on({
+        objectAdded: function(objectProps) {
+            console.info(objectProps);
+        },
+        undoStackChanged: function(length) {
+            if (length) {
+                $btnUndo.removeClass('disabled');
+            } else {
+                $btnUndo.addClass('disabled');
+            }
+            resizeEditor();
+        },
+        redoStackChanged: function(length) {
+            if (length) {
+                $btnRedo.removeClass('disabled');
+            } else {
+                $btnRedo.addClass('disabled');
+            }
+            resizeEditor();
+        },
+        objectScaled: function(obj) {
+            if (obj.type === 'text') {
+                $inputFontSizeRange.val(obj.fontSize);
+            }
+        },
+        addText: function(pos) {
+            imageEditor.addText('Double Click', {
+                position: pos.originPosition
+            }).then(objectProps => {
+                console.log(objectProps);
+            });
+        },
+        objectActivated: function(obj) {
+            activeObjectId = obj.id;
+            if (obj.type === 'rect' || obj.type === 'circle' || obj.type === 'triangle') {
+                showSubMenu('shape');
+                setShapeToolbar(obj);
+                activateShapeMode();
+            } else if (obj.type === 'icon') {
+                showSubMenu('icon');
+                setIconToolbar(obj);
+                activateIconMode();
+            } else if (obj.type === 'text') {
+                showSubMenu('text');
+                setTextToolbar(obj);
+                activateTextMode();
+            }
+        },
+        mousedown: function(event, originPointer) {
+            if ($imageFilterSubMenu.is(':visible') && imageEditor.hasFilter('colorFilter')) {
+                imageEditor.applyFilter('colorFilter', {
+                    x: parseInt(originPointer.x, 10),
+                    y: parseInt(originPointer.y, 10)
+                });
+            }
+        }
+    });
+
+    // Attach button click event listeners
+    $btns.on('click', function() {
+        $btnsActivatable.removeClass('active');
+    });
+
+    $btnsActivatable.on('click', function() {
+        $(this).addClass('active');
+    });
+
+    $btnUndo.on('click', function() {
+        $displayingSubMenu.hide();
+
+        if (!$(this).hasClass('disabled')) {
+            imageEditor.undo();
+        }
+    });
+
+    $btnRedo.on('click', function() {
+        $displayingSubMenu.hide();
+
+        if (!$(this).hasClass('disabled')) {
+            imageEditor.redo();
+        }
+    });
+
+    $btnClearObjects.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.clearObjects();
+    });
+
+    $btnRemoveActiveObject.on('click', function() {
+        $displayingSubMenu.hide();
+        imageEditor.removeObject(activeObjectId);
+    });
+
+    $btnCrop.on('click', function() {
+        imageEditor.startDrawingMode('CROPPER');
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $cropSubMenu.show();
+    });
+
+    $btnFlip.on('click', function() {
+        imageEditor.stopDrawingMode();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $flipSubMenu.show();
+    });
+
+    $btnRotation.on('click', function() {
+        imageEditor.stopDrawingMode();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $rotationSubMenu.show();
+    });
+
+    $btnClose.on('click', function() {
+        imageEditor.stopDrawingMode();
+        $displayingSubMenu.hide();
+    });
+
+    $btnApplyCrop.on('click', function() {
+        imageEditor.crop(imageEditor.getCropzoneRect()).then(() => {
+            imageEditor.stopDrawingMode();
+            resizeEditor();
+        });
+    });
+
+    $btnCancelCrop.on('click', function() {
+        imageEditor.stopDrawingMode();
+    });
+
+    $btnFlipX.on('click', function() {
+        imageEditor.flipX().then(status => {
+            console.log('flipX: ', status.flipX);
+            console.log('flipY: ', status.flipY);
+            console.log('angle: ', status.angle);
+        });
+    });
+
+    $btnFlipY.on('click', function() {
+        imageEditor.flipY().then(status => {
+            console.log('flipX: ', status.flipX);
+            console.log('flipY: ', status.flipY);
+            console.log('angle: ', status.angle);
+        });
+    });
+
+    $btnResetFlip.on('click', function() {
+        imageEditor.resetFlip().then(status => {
+            console.log('flipX: ', status.flipX);
+            console.log('flipY: ', status.flipY);
+            console.log('angle: ', status.angle);
+        });
+    });
+
+    $btnRotateClockwise.on('click', function() {
+        imageEditor.rotate(30);
+    });
+
+    $btnRotateCounterClockWise.on('click', function() {
+        imageEditor.rotate(-30);
+    });
+
+    $inputRotationRange.on('mousedown', function() {
+        var changeAngle = function() {
+            imageEditor.setAngle(parseInt($inputRotationRange.val(), 10)).catch(() => {});
+        };
+        $(document).on('mousemove', changeAngle);
+        $(document).on('mouseup', function stopChangingAngle() {
+            $(document).off('mousemove', changeAngle);
+            $(document).off('mouseup', stopChangingAngle);
+        });
+    });
+
+    $inputRotationRange.on('change', function() {
+        imageEditor.setAngle(parseInt($inputRotationRange.val(), 10)).catch(() => {});
+    });
+
+    $inputBrushWidthRange.on('change', function() {
+        imageEditor.setBrush({width: parseInt(this.value, 10)});
+    });
+
+    $inputImage.on('change', function(event) {
+        var file;
+
+        if (!supportingFileAPI) {
+            alert('This browser does not support file-api');
+        }
+
+        file = event.target.files[0];
+        imageEditor.loadImageFromFile(file).then(result => {
+            console.log(result);
+            imageEditor.clearUndoStack();
+        });
+    });
+
+    $btnDownload.on('click', function() {
+        var imageName = imageEditor.getImageName();
+        var dataURL = imageEditor.toDataURL();
+        var blob, type, w;
+
+        console.log(dataURL);
+
+        $.ajax({
+            url: window.location.href,
+            method: 'post',
+            data: {imageData: dataURL},
+            success: function (responce) {
+                if (responce.status) {
+                    swal({
+                        position: 'top-end',
+                        type: 'success',
+                        title: 'Изображение сохранено',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            },
+            error: function (e) {
+                console.log('Error');
+            }
+        });
+
+    });
+
+    // control draw line mode
+    $btnDrawLine.on('click', function() {
+        imageEditor.stopDrawingMode();
+        $displayingSubMenu.hide();
+        $displayingSubMenu = $drawLineSubMenu.show();
+        $selectLine.eq(0).change();
+    });
+
+    $selectLine.on('change', function() {
+        var mode = $(this).val();
+        var settings = getBrushSettings();
+
+        imageEditor.stopDrawingMode();
+        if (mode === 'freeDrawing') {
+            imageEditor.startDrawingMode('FREE_DRAWING', settings);
+        } else {
+            imageEditor.startDrawingMode('LINE_DRAWING', settings);
+        }
+    });
+
+    brushColorpicker.on('selectColor', function(event) {
+        imageEditor.setBrush({
+            color: hexToRGBa(event.color, 0.5)
+        });
+    });
+
+    // control draw shape mode
+    $btnDrawShape.on('click', function() {
+        showSubMenu('shape');
+
+        // step 1. get options to draw shape from toolbar
+        shapeType = $('[name="select-shape-type"]:checked').val();
+
+        shapeOptions.stroke = '#000000';
+        shapeOptions.fill = '#ffffff';
+
+        shapeOptions.strokeWidth = Number($inputStrokeWidthRange.val());
+
+        // step 2. set options to draw shape
+        imageEditor.setDrawingShape(shapeType, shapeOptions);
+
+        // step 3. start drawing shape mode
+        activateShapeMode();
+    });
+
+    $selectShapeType.on('change', function() {
+        shapeType = $(this).val();
+
+        imageEditor.setDrawingShape(shapeType);
+    });
+
+    $inputCheckTransparent.on('change', function() {
+        var colorType = $selectColorType.val();
+        var isTransparent = $(this).prop('checked');
+        var color;
+
+        if (!isTransparent) {
+            color = shapeColorpicker.getColor();
+        } else {
+            color = 'transparent';
+        }
+
+        if (colorType === 'stroke') {
+            imageEditor.changeShape(activeObjectId, {
+                stroke: color
+            });
+        } else if (colorType === 'fill') {
+            imageEditor.changeShape(activeObjectId, {
+                fill: color
+            });
+        }
+
+        imageEditor.setDrawingShape(shapeType, shapeOptions);
+    });
+
+    shapeColorpicker.on('selectColor', function(event) {
+        var colorType = $selectColorType.val();
+        var isTransparent = $inputCheckTransparent.prop('checked');
+        var color = event.color;
+
+        if (isTransparent) {
+            return;
+        }
+
+        if (colorType === 'stroke') {
+            imageEditor.changeShape(activeObjectId, {
+                stroke: color
+            });
+        } else if (colorType === 'fill') {
+            imageEditor.changeShape(activeObjectId, {
+                fill: color
+            });
+        }
+
+        imageEditor.setDrawingShape(shapeType, shapeOptions);
+    });
+
+    $inputStrokeWidthRange.on('change', function() {
+        var strokeWidth = Number($(this).val());
+
+        imageEditor.changeShape(activeObjectId, {
+            strokeWidth: strokeWidth
+        });
+
+        imageEditor.setDrawingShape(shapeType, shapeOptions);
+    });
+
+    // control text mode
+    $btnText.on('click', function() {
+        showSubMenu('text');
+        activateTextMode();
+    });
+
+    $inputFontSizeRange.on('change', function() {
+        imageEditor.changeTextStyle(activeObjectId, {
+            fontSize: parseInt(this.value, 10)
+        });
+    });
+
+    $btnTextStyle.on('click', function(e) { // eslint-disable-line
+        var styleType = $(this).attr('data-style-type');
+        var styleObj;
+
+        e.stopPropagation();
+
+        switch (styleType) {
+            case 'b':
+                styleObj = {fontWeight: 'bold'};
+                break;
+            case 'i':
+                styleObj = {fontStyle: 'italic'};
+                break;
+            case 'u':
+                styleObj = {textDecoration: 'underline'};
+                break;
+            case 'l':
+                styleObj = {textAlign: 'left'};
+                break;
+            case 'c':
+                styleObj = {textAlign: 'center'};
+                break;
+            case 'r':
+                styleObj = {textAlign: 'right'};
+                break;
+            default:
+                styleObj = {};
+        }
+
+        imageEditor.changeTextStyle(activeObjectId, styleObj);
+    });
+
+    textColorpicker.on('selectColor', function(event) {
+        imageEditor.changeTextStyle(activeObjectId, {
+            'fill': event.color
+        });
+    });
+
+    // control icon
+    $btnAddIcon.on('click', function() {
+        showSubMenu('icon');
+        activateIconMode();
+    });
+
+    function onClickIconSubMenu(event) {
+        var element = event.target || event.srcElement;
+        var iconType = $(element).attr('data-icon-type');
+
+        imageEditor.once('mousedown', function(e, originPointer) {
+            imageEditor.addIcon(iconType, {
+                left: originPointer.x,
+                top: originPointer.y
+            }).then(objectProps => {
+                console.log(objectProps);
+            });
+        });
+    }
+
+    $btnRegisterIcon.on('click', function() {
+        $iconSubMenu.find('.menu-item').eq(3).after(
+            '<li id="customArrow" class="menu-item icon-text" data-icon-type="customArrow">↑</li>'
+        );
+
+        imageEditor.registerIcons({
+            customArrow: 'M 60 0 L 120 60 H 90 L 75 45 V 180 H 45 V 45 L 30 60 H 0 Z'
+        });
+
+        $btnRegisterIcon.off('click');
+
+        $iconSubMenu.on('click', '#customArrow', onClickIconSubMenu);
+    });
+
+    $iconSubMenu.on('click', '.icon-text', onClickIconSubMenu);
+
+    iconColorpicker.on('selectColor', function(event) {
+        imageEditor.changeIconColor(activeObjectId, event.color);
+    });
+
+    // control mask filter
+    $btnMaskFilter.on('click', function() {
+        imageEditor.stopDrawingMode();
+        $displayingSubMenu.hide();
+
+        $displayingSubMenu = $filterSubMenu.show();
+    });
+
+    $btnImageFilter.on('click', function() {
+        var filters = {
+            'grayscale': $inputCheckGrayscale,
+            'invert': $inputCheckInvert,
+            'sepia': $inputCheckSepia,
+            'sepia2': $inputCheckSepia2,
+            'blur': $inputCheckBlur,
+            'shapren': $inputCheckSharpen,
+            'emboss': $inputCheckEmboss,
+            'removeWhite': $inputCheckRemoveWhite,
+            'brightness': $inputCheckBrightness,
+            'noise': $inputCheckNoise,
+            'gradientTransparency': $inputCheckGradientTransparency,
+            'pixelate': $inputCheckPixelate,
+            'tint': $inputCheckTint,
+            'multiply': $inputCheckMultiply,
+            'blend': $inputCheckBlend,
+            'colorFilter': $inputCheckColorFilter
+        };
+
+        tui.util.forEach(filters, function($value, key) {
+            $value.prop('checked', imageEditor.hasFilter(key));
+        });
+        $displayingSubMenu.hide();
+
+        $displayingSubMenu = $imageFilterSubMenu.show();
+    });
+
+    $btnLoadMaskImage.on('change', function() {
+        var file;
+        var imgUrl;
+
+        if (!supportingFileAPI) {
+            alert('This browser does not support file-api');
+        }
+
+        file = event.target.files[0];
+
+        if (file) {
+            imgUrl = URL.createObjectURL(file);
+
+            imageEditor.loadImageFromURL(imageEditor.toDataURL(), 'FilterImage').then(() => {
+                imageEditor.addImageObject(imgUrl).then(objectProps => {
+                    URL.revokeObjectURL(file);
+                    console.log(objectProps);
+                });
+            });
+        }
+    });
+
+    $btnApplyMask.on('click', function() {
+        imageEditor.applyFilter('mask', {
+            maskObjId: activeObjectId
+        }).then(result => {
+            console.log(result);
+        });
+    });
+
+    $inputCheckGrayscale.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Grayscale', null);
+    });
+
+    $inputCheckInvert.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Invert', null);
+    });
+
+    $inputCheckSepia.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Sepia', null);
+    });
+
+    $inputCheckSepia2.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Sepia2', null);
+    });
+
+    $inputCheckBlur.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Blur', null);
+    });
+
+    $inputCheckSharpen.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Sharpen', null);
+    });
+
+    $inputCheckEmboss.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'Emboss', null);
+    });
+
+    $inputCheckRemoveWhite.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'removeWhite', {
+            threshold: parseInt($inputRangeRemoveWhiteThreshold.val(), 10),
+            distance: parseInt($inputRangeRemoveWhiteDistance.val(), 10)
+        });
+    });
+
+    $inputRangeRemoveWhiteThreshold.on('change', function() {
+        applyOrRemoveFilter($inputCheckRemoveWhite.is(':checked'), 'removeWhite', {
+            threshold: parseInt(this.value, 10)
+        });
+    });
+
+    $inputRangeRemoveWhiteDistance.on('change', function() {
+        applyOrRemoveFilter($inputCheckRemoveWhite.is(':checked'), 'removeWhite', {
+            distance: parseInt(this.value, 10)
+        });
+    });
+
+    $inputCheckBrightness.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'brightness', {
+            brightness: parseInt($inputRangeBrightnessValue.val(), 10)
+        });
+    });
+
+    $inputRangeBrightnessValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckBrightness.is(':checked'), 'brightness', {
+            brightness: parseInt(this.value, 10)
+        });
+    });
+
+    $inputCheckNoise.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'noise', {
+            noise: parseInt($inputRangeNoiseValue.val(), 10)
+        });
+    });
+
+    $inputRangeNoiseValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckNoise.is(':checked'), 'noise', {
+            noise: parseInt(this.value, 10)
+        });
+    });
+
+    $inputCheckGradientTransparency.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'gradientTransparency', {
+            threshold: parseInt($inputRangeGradientTransparencyValue.val(), 10)
+        });
+    });
+
+    $inputRangeGradientTransparencyValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckGradientTransparency.is(':checked'), 'gradientTransparency', {
+            threshold: parseInt(this.value, 10)
+        });
+    });
+
+    $inputCheckPixelate.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'pixelate', {
+            blocksize: parseInt($inputRangePixelateValue.val(), 10)
+        });
+    });
+
+    $inputRangePixelateValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckPixelate.is(':checked'), 'pixelate', {
+            blocksize: parseInt(this.value, 10)
+        });
+    });
+
+    $inputCheckTint.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'tint', {
+            color: tintColorpicker.getColor(),
+            opacity: parseFloat($inputRangeTintOpacityValue.val())
+        });
+    });
+
+    tintColorpicker.on('selectColor', function(e) {
+        applyOrRemoveFilter($inputCheckTint.is(':checked'), 'tint', {
+            color: e.color
+        });
+    });
+
+    $inputRangeTintOpacityValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckTint.is(':checked'), 'tint', {
+            opacity: parseFloat($inputRangeTintOpacityValue.val())
+        });
+    });
+
+    $inputCheckMultiply.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'multiply', {
+            color: multiplyColorpicker.getColor()
+        });
+    });
+
+    multiplyColorpicker.on('selectColor', function(e) {
+        applyOrRemoveFilter($inputCheckMultiply.is(':checked'), 'multiply', {
+            color: e.color
+        });
+    });
+
+    $inputCheckBlend.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'blend', {
+            color: blendColorpicker.getColor(),
+            mode: $selectBlendType.val()
+        });
+    });
+
+    blendColorpicker.on('selectColor', function(e) {
+        applyOrRemoveFilter($inputCheckBlend.is(':checked'), 'blend', {
+            color: e.color
+        });
+    });
+
+    $selectBlendType.on('change', function() {
+        applyOrRemoveFilter($inputCheckBlend.is(':checked'), 'blend', {
+            mode: this.value
+        });
+    });
+
+    $inputCheckColorFilter.on('change', function() {
+        applyOrRemoveFilter(this.checked, 'colorFilter', {
+            color: '#FFFFFF',
+            threshold: $inputRangeColorFilterValue.val()
+        });
+    });
+
+    $inputRangeColorFilterValue.on('change', function() {
+        applyOrRemoveFilter($inputCheckColorFilter.is(':checked'), 'colorFilter', {
+            threshold: this.value
+        });
+    });
+
+    // Etc..
+
+    var editableImage = '{{ image.image.url }}';
+
+    // Load sample image
+    imageEditor.loadImageFromURL(editableImage, 'SampleImage').then(sizeValue => {
+        console.log(sizeValue);
+        imageEditor.clearUndoStack();
+    });
+
+    // IE9 Unselectable
+    $('.menu').on('selectstart', function() {
+        return false;
+    });
+    </script>
+
+{% endblock footer_scripts %}

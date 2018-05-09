@@ -1,0 +1,134 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    {#    Список Ваших вебинаров#}
+{% endblock %}
+
+{% block page_small_name %}
+    {#    Каждая отправленная ссылка на вебинар - это твой потенциальный новый партнер.#}
+    {#    Действуй!#}
+{% endblock %}
+
+{% block help_link %}
+    {#    <a class="btn btn-outline-info" href="#">#}
+    {#        <i class="icon-graduation pr-2"></i>#}
+    {#        Как с этим работать?#}
+    {#    </a>#}
+{% endblock %}
+
+{% block content %}
+    <div class="row clearfix">
+        <div class="col-md-12">
+            {% if webinar.is_webinar_active_now %}
+                <div class="card card-shadow">
+                    <div class="card-header">
+                        <div class="card-title">
+                            {{ webinar.title }}
+                            {% if user == webinar.owner %}
+                                {% include 'webinar/partials/_webinar-actions.html' with webinar=webinar %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body">
+                            <div data-type="youtube" data-video-id="{{ webinar.get_video_id }}"></div>
+                            <br>
+                            <ul class="nav nav-tabs mb-4" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tab_1">Описание вебинара</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tab_2">Пользователи</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div class="tab-pane" id="tab_1" role="tabpanel">
+                                    <p>Автор: <b>{{ webinar.author }}</b></p>
+                                    <div>{{ webinar.description | safe }}</div>
+                                </div>
+                                <div class="tab-pane active" id="tab_2" role="tabpanel">
+                                    <table id="bs4-table" class="table table-bordered table-striped"
+                                           cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th>E-mail</th>
+                                            <th>Посещал вебинар</th>
+                                            <th>Зарегистрирван</th>
+                                        </tr>
+                                        </thead>
+                                        <tfoot>
+                                        <tr>
+                                            <th>E-mail</th>
+                                            <th>Посещал вебинар</th>
+                                            <th>Зарегистрирван</th>
+                                        </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        {% for webinar_user in webinar.webinaruser_set.all %}
+                                        <tr>
+                                            <td>{{ webinar_user.email }}</td>
+                                            <td>{% if webinar_user.is_visit %}<span class="badge badge-success">да</span>{% else %}<span class="badge badge-danger" style="text-transform: uppercase; font-size: .8em;">нет</span>{% endif %}</td>
+                                            <td>{{ webinar_user.created }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="header">
+                        <h2>{{ webinar.title }}</h2>
+                        {% if user == webinar.owner %}
+                            {% include 'webinar/partials/_webinar-actions.html' with webinar=webinar %}
+                        {% endif %}
+                    </div>
+                    <div class="body">
+                        {% if webinar.image %}
+                            <div class="text-center">
+                                {% thumbnail webinar.image "300x200" crop="center" format='PNG' as im %}
+                                    <img src="{{ im.url }}" alt="{{ webinar.title }}"
+                                         class="img-thumbnail responsive-img m-b-15">
+                                {% endthumbnail %}
+                            </div>
+                        {% endif %}
+                        <div class="text-center">
+                            <h2>Извините! <br><small>Но этот вебинар сейчас не доступен.</small></h2>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer_scripts %}
+    <script src="{% static 'diverse/' %}assets/vendor/data-tables/jquery.dataTables.min.js"></script>
+    <script src="{% static 'diverse/' %}assets/vendor/data-tables/dataTables.bootstrap4.min.js"></script>
+    <link href="{% static 'diverse/' %}assets/vendor/data-tables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.plyr.io/2.0.18/plyr.css">
+    <script src="https://cdn.plyr.io/2.0.18/plyr.js"></script>
+    <script>
+        plyr.setup();
+
+        $('#bs4-table').DataTable();
+    </script>
+
+    <style>
+        .plyr__controls {
+            background: #555555 !important;
+            padding-top: 15px !important;
+        }
+
+        button.plyr__play-large {
+            padding: 30px;
+        }
+    </style>
+{% endblock %}

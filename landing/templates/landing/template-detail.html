@@ -1,0 +1,97 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Шаблон "{{ template.title }}"</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet"
+          type="text/css">
+    <script src="{% static 'AdminBSBMaterialDesign/' %}plugins/jquery/jquery.min.js"></script>
+</head>
+<body class="theme-red">
+<div class="block__flex">
+    <div class="block__item">
+        <a class="block__logo" href="/">GoFriends Network</a>
+    </div>
+    <div class="block__item text-center">
+        <form id="choiceTemplateToWebinar" action="" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="template" value="{{ template.id }}">
+            <select name="webinar">
+                <option disabled selected>Выбрать вебинар</option>
+                {% for webinar in webinars %}
+                    <option value="{{ webinar.id }}">{{ webinar.title }}</option>
+                {% endfor %}
+            </select>
+
+            {{ form }}
+
+            <button class="btn" style="display: none;">Привязать шаблон</button>
+        </form>
+    </div>
+    <div class="block__item text-right">
+        <h3>Шаблон "{{ template.title }}"</h3>
+    </div>
+</div>
+<iframe frameborder="0" src="//{{ request.get_host }}{% url 'landing:frame' template.category.slug template.slug %}"></iframe>
+<style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+
+    .block__flex {
+        display: flex;
+        background: #F44336;
+        align-items: center;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+        color: #fff;
+        position: fixed;
+        width: 100%;
+        z-index: 9999;
+        font-family: 'Roboto', Serif;
+    }
+
+    .block__item {
+        width: calc(100% / 3);
+        padding: 0 20px;
+    }
+
+    .block__logo {
+        font-size: 18px;
+        line-height: 20px;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    iframe {
+        display: block;
+        position: relative;
+        top: 60px;
+        width: 100vw;
+        height: calc(100vh - 60px);
+        padding: 0;
+    }
+
+    .btn {
+        padding: 5px 15px;
+        border: none;
+        background: #fff;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+</style>
+<script src="{% static '/' %}main.js"></script>
+</body>
+</html>
+

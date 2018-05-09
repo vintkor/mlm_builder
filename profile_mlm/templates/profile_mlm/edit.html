@@ -1,0 +1,167 @@
+{% extends 'theme_2.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block content %}
+    <div id="clearFocuse" class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card card-shadow">
+                <div class="card-header">
+                    <div class="card-title">Редактировать профиль пользователя</div>
+                </div>
+                <div class="card-body">
+
+                    <form action="" method="post">
+                                {% csrf_token %}
+
+                                <h3 class="text-center col-pink" style="margin-bottom: 50px;">Основная информация</h3>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.first_name.errors %}error{% endif %}">
+                                                {% render_field form.first_name class='form-control' placeholder='Имя' value=profile.user.first_name %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.first_name.errors %}error{% endif %}">
+                                                {% render_field form.last_name class='form-control' placeholder='Фамилия' value=profile.user.last_name %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-6">
+                                        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.email.errors %}error{% endif %}">
+                                                {% render_field form.email class='form-control' placeholder='Email' value=profile.user.email %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.email.errors }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.skype.id_for_label }}">{{ form.skype.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.skype.errors %}error{% endif %}">
+                                                {% render_field form.skype class='form-control' placeholder='Skype' value=profile.skype %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.skype.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.phone.errors %}error{% endif %}">
+                                                {% render_field form.phone class='form-control phone' placeholder='+__ (___) ___-__-__' value=profile.phone %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.phone.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.website.id_for_label }}">{{ form.website.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.website.errors %}error{% endif %}">
+                                                {% render_field form.website class='form-control' placeholder='Сайт' value=profile.website %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.website.errors }}</div>
+                                    </div>
+                                </div>
+
+                                <h3 class="text-center col-pink" style="margin-bottom: 50px;">Профили в социальных сетях</h3>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_vkontakte.id_for_label }}">{{ form.link_vkontakte.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_vkontakte.errors %}error{% endif %}">
+                                                {% render_field form.link_vkontakte class='form-control' placeholder='Профиль VK' value=profile.link_vkontakte %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_vkontakte.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_facebook.id_for_label }}">{{ form.link_facebook.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_facebook.errors %}error{% endif %}">
+                                                {% render_field form.link_facebook class='form-control' placeholder='Профиль FACEBOOK' value=profile.link_facebook %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_facebook.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_my_world.id_for_label }}">{{ form.link_my_world.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_my_world.errors %}error{% endif %}">
+                                                {% render_field form.link_my_world class='form-control' placeholder='Профиль МОЙ МИР' value=profile.link_my_world %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_my_world.errors }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_twitter.id_for_label }}">{{ form.link_twitter.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_twitter.errors %}error{% endif %}">
+                                                {% render_field form.link_twitter class='form-control' placeholder='Профиль TWITTER' value=profile.link_twitter %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_twitter.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_instagram.id_for_label }}">{{ form.link_instagram.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_instagram.errors %}error{% endif %}">
+                                                {% render_field form.link_instagram class='form-control' placeholder='Профиль INSTAGRAM' value=profile.link_instagram %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_instagram.errors }}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="{{ form.link_odnoklassniki.id_for_label }}">{{ form.link_odnoklassniki.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.link_odnoklassniki.errors %}error{% endif %}">
+                                                {% render_field form.link_odnoklassniki class='form-control' placeholder='Профиль ODNOKLASNIKI' value=profile.link_odnoklassniki %}
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.link_odnoklassniki.errors }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                                        <div class="form-group">
+                                            <div class="form-line {% if form.description.errors %}error{% endif %}">
+                                                {{ form.description }}
+                                                <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+                                                <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+                                            </div>
+                                        </div>
+                                        <div class="error forms__errors">{{ form.description.errors }}</div>
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-lg waves-effect">Сохранить изменения</button>
+                            </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block footer_scripts %}
+
+{% endblock %}

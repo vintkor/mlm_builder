@@ -1,0 +1,105 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    Список Ваших изображений
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на лендинг с другим изображением повышает шанс получить нового партнёра. Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">Как с этим работать?</a>
+{% endblock %}
+
+{% block content %}
+    {% csrf_token %}
+
+    <div id="app">
+        <div class="row">
+            <div class="col-md-12">
+                <h2 class="text-center text-primary text-center">Найдено фотографий [[ totalPhotos ]]</h2>
+                <form action="" v-on:submit.prevent="searchImage">
+                    <input type="text" v-model="searchQuery" class="form-control" placeholder="Search...">
+                </form>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-outline-success btn-block" v-on:click="getPrevPage">&larr;</button>
+            </div>
+            <div class="col-md-8" style="text-align: center">
+                <span class="text-info">Страница [[ currentPage ]] из [[ totalPages ]]</span>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-success btn-block pull-right" v-on:click="getNextPage">&rarr;</button>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="list-group">
+                    <a
+                            href="#"
+                            class="list-group-item"
+                            v-for="category in categories"
+                            v-on:click.prevent="filterByCategory(category[0])"
+                            v-bind:class="{ active: isActiveCategory(category[0]) }"
+                    >[[ category[1] ]]</a>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-3" v-for="photo in photos">
+                        <div class="card mb-4">
+                            <img class="card-img-top img-fluid" :src="photo.webformatURL">
+                            <div class="card-body">
+                                <button
+                                        class="btn btn-outline-primary btn-block"
+                                        v-on:click="addImageToMe(photo.largeImageURL, photo.id)"
+                                        v-if="isInMyImages(photo.id)"
+                                >+ в мои картинки</button>
+                            </div>
+                            <div class="card-footer">
+                                <small class="text-muted"><i class="fa fa-thumbs-o-up"></i> [[ photo.likes ]]</small>
+                                <small class="text-muted pull-right"><i class="fa fa-download"></i> [[ photo.downloads ]]
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
+            <div class="col-md-2">
+                <button class="btn btn-outline-success btn-block" v-on:click="getPrevPage">&larr;</button>
+            </div>
+            <div class="col-md-8" style="text-align: center">
+                <span class="text-info">Страница [[ currentPage ]] из [[ totalPages ]]</span>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-success btn-block pull-right" v-on:click="getNextPage">&rarr;</button>
+            </div>
+        </div>
+
+        <br>
+
+    </div>
+
+{% endblock content %}
+
+{% block footer_scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
+    <script src="{% static '' %}images/image-search.js"></script>
+{% endblock footer_scripts %}

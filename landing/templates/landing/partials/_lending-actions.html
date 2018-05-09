@@ -1,0 +1,19 @@
+<div class="btn-group float-right task-list-action">
+    <div class="dropdown">
+        <a href="#" class="btn btn-transparent default-color dropdown-hover p-0" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+            <i class=" icon-options"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(-144px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">
+            <a class="dropdown-item" target="_blank" href="{{ lending.webinar.get_absolute_url }}"><i class="fa fa-video-camera text-info pr-2"></i> Перейти на вебинар</a>
+            <a class="dropdown-item editLendingDescription" href="#" data-lending="{{ lending.id }}"><i class="fa fa-edit text-info pr-2"></i> Редактировать описание</a>
+{#            <a class="dropdown-item" href="#" data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-edit text-info pr-2"></i> Редактировать описание</a>#}
+            {% if lending.is_premium %}
+                <a class="dropdown-item" href="{{ lending.get_edit_premium_link }}"> <i class="icon-user text-info pr-2"></i> Редактировать</a>
+            {% else %}
+{#                <a class="dropdown-item" href="#"> <i class="icon-user text-info pr-2"></i> Редактировать</a>#}
+            {% endif %}
+            <a class="dropdown-item deleteLending" href="{% url 'landing:delete' lending.id %}"><i class="icon-pencil text-danger pr-2"></i> Удалить</a>
+        </div>
+    </div>
+</div>

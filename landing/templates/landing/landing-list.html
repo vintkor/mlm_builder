@@ -1,0 +1,188 @@
+{% extends 'theme_2.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block page_name %}
+    Список Ваших лендингов
+{% endblock %}
+
+{% block page_small_name %}
+    Каждая отправленная ссылка на лендинг - это твой потенциальный новый партнер. Действуй!
+{% endblock %}
+
+{% block help_link %}
+    <a class="btn btn-outline-info" href="#">Как с этим работать?</a>
+{% endblock %}
+
+{% block content %}
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '872611946244817',
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v2.12'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    {% for lending in landings %}
+        <div class="row clearfix">
+            <div class="col-md-12">
+                <div class="card card-shadow mb-4">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span id="landingTitle-{{ lending.id }}">{{ lending.title }}</span>
+                            {% include 'landing/partials/_lending-actions.html' with lending=lending %}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="row zebra">
+                                    <div class="col-md-2 photoboxGallery">
+                                        {% if lending.image %}
+                                            <a href="{{ lending.image.url }}">
+                                            <img id="imageFor-{{ lending.id }}" src="{{ lending.image.url }}" alt="{{ lending.title }}" class="img-fluid rounded">
+                                            </a>
+                                        {% else %}
+                                            <img id="imageFor-{{ lending.id }}" src="" alt="{{ lending.title }}" class="img-fluid rounded">
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div id="landingDescription-{{ lending.id }}">{{ lending.description | safe }}</div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a class="btn btn-block btn-outline-success" target="_blank" href="{{ lending.get_absolute_url }}">Перейти на лендинг</a>
+                                        <a class="btn btn-block btn-outline-info js-textareacopybtn" href="{{ lending.get_absolute_url }}">Копировать ссылку</a>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <a
+                                                class="btn btn-square btn-light btn-block shareFacebook"
+                                                href="#"
+                                                data-url="{{ lending.webinar.get_absolute_url }}"
+                                                style="background: #3b5998; color: #fff;">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                {% for userimage in lending.get_userimages %}
+                                    <br>
+                                    <div class="row zebra">
+                                        <div class="col-md-2 photoboxGallery">
+                                            <a href="{{ userimage.userimage.image.url }}">
+                                            <img src="{{ userimage.userimage.image.url }}" class="img-fluid rounded">
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><span class="text-info">Заголовок:</span> {{ userimage.title }}</p>
+                                            <p><span class="text-info">Описание:</span> {{ userimage.description }}</p>
+                                            <p><span class="text-info">Собрано e-mail адресов: </span> <span style="font-size: 1.1em">{{ userimage.email_counter }}</span></p>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <a class="btn btn-block btn-outline-success" target="_blank" href="{% url 'webinar-view' lending.id lending.webinar.slug userimage.userimage.id  %}">Перейти на лендинг</a>
+                                            <a class="btn btn-block btn-outline-info js-textareacopybtn" href="{% url 'webinar-view' lending.id lending.webinar.slug userimage.userimage.id  %}">Копировать ссылку</a>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a
+                                                class="btn btn-square btn-light btn-block shareFacebook"
+                                                href="#"
+                                                data-url="{% url 'webinar-view' lending.id lending.webinar.slug userimage.userimage.id  %}"
+                                                style="background: #3b5998; color: #fff;">
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-header" style="background: #f6f6f6;">
+                        <div class="webinar__date__info">
+                            <div class="row">
+                                <div class="col-md-6">Дата создания лендинга: <b>{{ lending.created }}</b></div>
+                                <div class="col-md-6 text-right">Собрано e-mail адресов: <b>{{ lending.get_count_email }}</b></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <div id="editLendingModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myLargeModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" id="editLendingModalForm" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="titleEdit">Название</label>
+                            <input id="titleEdit" type="text" name="title" value="" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descriptionEdit">Описание</label>
+                            <textarea id="descriptionEdit" type="text" name="description" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageEdit">Изображение</label>
+                            <input id="imageEdit" type="file" name="image" class="form-control">
+                        </div>
+                        <hr>
+                        <div>
+                            <img id="image" src="" class="img-responsive">
+                        </div>
+                        <hr>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" id="saveLendingModalForm" form="editLendingModalForm" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block footer_scripts %}
+    <link rel="stylesheet" href="{% static '/' %}simple_page_builder/bower_components/cropperjs/dist/cropper.min.css">
+    <script src="{% static '/' %}simple_page_builder/bower_components/cropperjs/dist/cropper.min.js"></script>
+    <script>
+        $('.shareFacebook').click(function (e) {
+            e.preventDefault();
+
+            var url = window.location.host + $(this).data('url');
+
+            FB.ui({
+                method: 'share',
+                display: 'popup',
+                href: url
+            }, function (response) {
+            });
+        });
+    </script>
+    <style>
+    .zebra {
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e9ec;
+    }
+    </style>
+{% endblock %}

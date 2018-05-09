@@ -1,0 +1,216 @@
+$dark-color: #000;
+$main-color: #3498db;
+$white-color: #fff;
+$danger-color: #d22;
+$success-color: #3db86a;
+$primary-color: #a768f3;
+
+$sort_templates_width: 194px;
+
+.sort_templates {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    overflow: scroll;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    &__wrapper {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: $sort_templates_width;
+        box-shadow: 0 0 25px rgba($dark-color, .05);
+        z-index: 20;
+        background: $white-color;
+        transform: translateX($sort_templates_width);
+        transition: .4s;
+        &--active {
+            transform: translateX(0);
+        }
+    }
+    &__toggle {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 40px;
+        border: none;
+        background: $main-color;
+        outline: none;
+        color: $white-color;
+        transform: translateX(-40px);
+        transition: .2s ease-in-out .2s;
+        .fa {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            position: absolute;
+            //transform: translateX(-52px);
+        } 
+        &--active {
+            transform: translateX(0);
+        }
+    }
+    .sorlTemplate {
+        position: relative;
+        &--hover {
+            &:after {
+                display: block;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba($dark-color, .2);
+            }
+        }
+    }
+    .drag-handle {
+        margin-bottom: 5px;
+        &:hover {
+            box-shadow: 0 0 5px rgba($dark-color, .2);
+            cursor: move;
+        }
+    }
+}
+
+.sortSections {
+    width: calc(100vw - #{$sort_templates_width});
+    transition: .2s;
+    &--full {
+        width: 100vw;
+    }
+}
+
+#sortSections {
+    outline: none;
+    min-height: 100px;
+    .drag-handle {
+        font: bold 20px Sans-Serif;
+        color: #5F9EDF;
+        display: flex;
+        position: absolute;
+        top: 40px;
+        right: 40px;
+        width: 40px;
+        height: 40px;
+        background: rgba($main-color, .1);
+        align-items: center;
+        justify-content: center;
+        cursor: move;
+        z-index: 3;
+        transition: .2s;
+        &:hover {
+            background: $main-color;
+            color: $white-color;
+        }
+    }
+    .delete_section {
+        font: bold 20px Sans-Serif;
+        display: flex;
+        position: absolute;
+        top: 40px;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        transition: .2s;
+        color: $danger-color;
+        background: rgba($danger-color, .1);
+        right: 0;
+        &:hover {
+            background: $danger-color;
+            color: $white-color;
+            cursor: pointer;
+        }
+    }
+    .editableImage {
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.sorlTemplate {
+    position: relative;
+}
+
+.editable {
+    outline: none;
+}
+
+
+#sortable {
+    height: 150px;
+    background: #f6f6f6;
+}
+
+.sortable-ghost {
+    opacity: .7;
+    background: #fff46a;
+}
+
+.zoomOutUp {
+    -webkit-animation-name: slideOutLeft;
+    animation-name: slideOutLeft;
+    -webkit-animation-duration: .4s;
+    animation-duration: .4s;
+}
+
+
+.savePage {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 50px;
+    height: 50px;
+    background: $success-color;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba($dark-color, 0);
+    transition: .2s;
+    color: $white-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    &:hover {
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba($dark-color, .2);
+    }
+}
+
+.linkPage {
+    @extend .savePage;
+    background: $main-color;
+    bottom: 90px;
+    &:active,
+    &:focus,
+    &:hover {
+        text-decoration: none;
+        color: $white-color;
+    }
+}
+
+.linkHome {
+    @extend .linkPage;
+    bottom: 150px;
+    background: $primary-color;
+}
+
+body.public-view #sortSections {
+    .delete_section,
+    .drag-handle {
+        display: none;
+    }
+}
