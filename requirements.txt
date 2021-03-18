@@ -13,7 +13,7 @@ facebookads==2.11.4
 idna==2.6
 MonthDelta==0.9.1
 phonenumberslite==8.9.0
-Pillow==5.0.0
+Pillow==8.1.1
 psycopg2==2.7.4
 pytz==2018.3
 requests==2.18.4
